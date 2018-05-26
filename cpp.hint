@@ -1,0 +1,2 @@
+#define STRINGIZE()
+#define DECLARE_EVENT_CLASS_NAME()
