@@ -296,6 +296,7 @@ namespace CoreUI
 		if (IsFullscreen())
 		{
 			SDL_SetWindowFullscreen(m_window, 0);
+			SDL_SetWindowSize(m_window, mode.w, mode.h);
 			SDL_SetWindowDisplayMode(m_window, &mode);
 			SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN);
 		}

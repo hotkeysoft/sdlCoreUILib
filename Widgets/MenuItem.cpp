@@ -30,9 +30,17 @@ namespace CoreUI
 	void MenuItem::Init()
 	{
 		m_label = Label::CreateAutoSize("l", m_renderer, m_text.c_str(), nullptr, Label::TEXT_AUTOSIZE_DEFAULT, LCF_MENUITEM);
-
+		m_label->SetBackgroundColor(m_backgroundColor);
+		m_label->SetForegroundColor(m_foregroundColor);
 		m_label->SetPadding(Dimension(8, 2));
 		m_label->Init();
+
+		m_activeLabel = Label::CreateAutoSize("la", m_renderer, m_text.c_str(), nullptr, Label::TEXT_AUTOSIZE_DEFAULT, LCF_MENUITEM);
+		m_activeLabel->SetBackgroundColor(m_selectedBgColor);
+		m_activeLabel->SetForegroundColor(m_selectedFgColor);
+		m_activeLabel->SetPadding(Dimension(8, 2));
+		m_activeLabel->Init();
+		
 		m_renderedMenu = nullptr;
 		m_renderedMenuRect = Rect();
 	}
@@ -41,7 +49,8 @@ namespace CoreUI
 	{
 		if (!m_renderedMenu)
 		{
-			Render();
+			Render(false);
+			Render(true);
 		}
 
 		if (m_renderedMenu)
@@ -161,7 +170,8 @@ namespace CoreUI
 		m_items.push_back(nullptr);
 	}
 
-	void MenuItem::Render()
+	// TODO: Sooo many constants...
+	void MenuItem::Render(bool active)
 	{
 		m_renderedMenuRect = Rect();
 
@@ -172,6 +182,7 @@ namespace CoreUI
 			{
 				item->Init();
 				Rect labelRect = item->m_label->GetRect(true, false);
+				labelRect.w += 16+8; // Space for icon + right arrow for submenus
 				m_renderedMenuRect.w = std::max(labelRect.w, m_renderedMenuRect.w);
 				m_renderedMenuRect.h += labelRect.h;
 			}
@@ -189,10 +200,16 @@ namespace CoreUI
 		{
 			RenderTarget target(m_renderer, texture);
 			if (target)
-			{
-				DrawFilledRect(&m_renderedMenuRect, m_backgroundColor);
+			{			
+				DrawFilledRect(&m_renderedMenuRect, active ? m_selectedBgColor : m_backgroundColor);
+				// Icon area
+				Rect iconArea = m_renderedMenuRect;
+				iconArea.w = 16 + GetShrinkFactor().w*2 + 2;
+				SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
+				DrawFilledRect(&iconArea, Color(255, 255, 255, 45));
+				SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_NONE);
 				Draw3dFrame(&m_renderedMenuRect, true);
-				
+
 				Rect target = m_renderedMenuRect.Deflate(GetShrinkFactor());
 
 				for (auto & item : m_items)
@@ -202,9 +219,21 @@ namespace CoreUI
 						Rect labelRect = item->m_label->GetRect(true, false);
 						target.h = labelRect.h;
 
-						item->m_label->Draw(&target, true);
-						item->m_rect = target;
+						if (item->m_image)
+						{
+							Rect imageRect = target;
+							imageRect.x += 2;
+							imageRect.w = 16+2;
+							item->m_image->Draw(&imageRect, Image::IMG_V_CENTER | Image::IMG_H_CENTER);
+						}
 
+						{
+							labelRect = Rect(target.x + 16+6, target.y, target.w - (16+6), target.h);
+							LabelPtr & label = active ? item->m_activeLabel : item->m_label;
+
+							label->Draw(&labelRect, true);
+							item->m_rect = target;
+						}
 						if (item->HasSubMenu())
 						{
 							static ImageRef image = RES().FindImage("menu.subitem");
@@ -224,7 +253,15 @@ namespace CoreUI
 					}
 				}
 
-				m_renderedMenu = TexturePtr(texture, sdl_deleter());
+				if (active)
+				{
+					m_renderedActiveMenu = TexturePtr(texture, sdl_deleter());
+				}
+				else
+				{
+					m_renderedMenu = TexturePtr(texture, sdl_deleter());
+				}
+				
 			}
 			else
 			{

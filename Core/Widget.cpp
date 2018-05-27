@@ -174,7 +174,7 @@ namespace CoreUI
 		{
 			if (background.IsTransparent())
 			{
-				SDL_SetTextureBlendMode(clone, SDL_BLENDMODE_BLEND);				
+				SDL_SetTextureBlendMode(clone, SDL_BLENDMODE_BLEND);
 			}
 			SetDrawColor(m_backgroundColor);
 

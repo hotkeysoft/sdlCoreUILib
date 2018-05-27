@@ -49,13 +49,15 @@ namespace CoreUI
 
 		MenuItemPtr ItemAt(PointRef pt);
 
-		void Render();
+		void Render(bool active);
 
 		bool m_opened;
 		LabelPtr m_label;
+		LabelPtr m_activeLabel;
 		Rect m_labelRect;
 		MenuItems m_items;
 		TexturePtr m_renderedMenu;
+		TexturePtr m_renderedActiveMenu;
 		Rect m_renderedMenuRect;
 
 		struct shared_enabler;

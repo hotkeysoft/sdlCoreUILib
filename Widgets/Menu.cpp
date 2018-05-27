@@ -133,7 +133,8 @@ namespace CoreUI
 		if (parent)
 		{
 			Rect highlight = item->m_rect.Offset(&parent->m_renderedMenuRect.Origin());
-			Draw3dFrame(&highlight, false);
+			SDL_RenderCopy(m_renderer, parent->m_renderedActiveMenu.get(), &item->m_rect, &highlight);
+
 			DrawActiveFrame(parent);
 		}
 	}

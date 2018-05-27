@@ -36,6 +36,7 @@ namespace CoreUI
 		int id;
 		int w;
 		int h;
+
 		bool operator<(const ScreenResolution & rhs) const { return (w == rhs.w) ? (h > rhs.h) : (w > rhs.w); }
 		std::string ToString() const
 		{
