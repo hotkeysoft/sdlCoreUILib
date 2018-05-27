@@ -241,10 +241,10 @@ namespace CoreUI
 		int xPos = 0;
 		if (underlinePos > 0)
 		{
-			TTF_SizeText(m_font, m_text.substr(0, underlinePos).c_str(), &xPos, nullptr);
+			TTF_SizeText(m_font, m_text.substr(0, underlinePos+1).c_str(), &xPos, nullptr);
 		}
 		int width = 16;
-		TTF_GlyphMetrics(m_font, m_text[underlinePos], nullptr, &width, nullptr, nullptr, nullptr);
+		TTF_GlyphMetrics(m_font, m_text[underlinePos + 1], nullptr, &width, nullptr, nullptr, nullptr);
 
 		// Texture from fonts are not writable
 		TexturePtr clone = CloneTexture(m_labelText);

@@ -86,13 +86,11 @@ namespace CoreUI
 					drawRect.y += m_lineHeight;
 				}
 
-				item->m_label->Draw(&drawRect);
-				
+				item->m_label->Draw(&drawRect);			
 				item->m_labelRect = drawRect;
 
 				if (item->IsOpened())
 				{
-					Draw3dFrame(&item->m_labelRect, false);
 					openedMenu = item;
 				}
 
@@ -101,21 +99,25 @@ namespace CoreUI
 		}
 
 		DrawOpenedMenu(openedMenu);
-
 	}
 
 	void Menu::DrawOpenedMenu(CoreUI::MenuItemPtr & item)
 	{
+		if (!item)
+		{
+			return;
+		}
+		Rect & labelRect = item->m_labelRect;
+		Draw3dFrame(&item->m_labelRect, true);
+
 		// Menu is on top of everything so no need for bounding rect
-		//TODO: Get main window size
-		ClipRect noclip(m_renderer, &Rect(0, 0, 2000, 2000), false);
+		ClipRect noclip(m_renderer, &WINMGR().GetWindowSize(), false);
 		if (noclip)
 		{
 			if (item)
 			{
-				//Draw3dFrame(&item->m_labelRect, false);
-				Point menuPos(item->m_labelRect.Origin());
-				menuPos.y += (m_lineHeight);
+				Point menuPos(labelRect.Origin());
+				menuPos.y += (m_lineHeight)-1;
 
 				item->Draw(&menuPos);
 			}
@@ -125,6 +127,10 @@ namespace CoreUI
 				DrawActiveFrame(m_active);
 			}
 		}
+
+		// "erase" space between label and menu
+		SetDrawColor(m_backgroundColor);
+		SDL_RenderDrawLine(m_renderer, labelRect.x + 1, labelRect.y + m_lineHeight - 1, labelRect.x + labelRect.w - 2, labelRect.y + m_lineHeight - 1);
 	}
 
 	void Menu::DrawActiveFrame(MenuItemRef item)
