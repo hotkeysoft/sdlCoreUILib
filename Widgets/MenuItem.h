@@ -29,9 +29,10 @@ namespace CoreUI
 
 		void Init() override;
 
-		static MenuItemPtr Create(RendererRef renderer, const char * id, const char * name, MenuItemRef parent);
+		static MenuItemPtr Create(RendererRef renderer, const char * id, const char * name, ImageRef image, MenuItemRef parent);
 
 		MenuItemPtr AddMenuItem(const char * id, const char * name, SDL_Keycode hotkey = SDLK_UNKNOWN);
+		MenuItemPtr AddMenuItem(const char * id, const char * name, ImageRef image, SDL_Keycode hotkey = SDLK_UNKNOWN);
 		void AddSeparator();
 		MenuItemRef GetParentMenuItem() { return dynamic_cast<MenuItemRef>(m_parent); }
 
@@ -45,7 +46,7 @@ namespace CoreUI
 		LabelRef GetLabel() { return m_label.get(); }
 
 	protected:
-		MenuItem(RendererRef renderer, const char * id, const char * name, MenuItemRef parent);
+		MenuItem(RendererRef renderer, const char * id, const char * name, ImageRef image, MenuItemRef parent);
 
 		MenuItemPtr ItemAt(PointRef pt);
 

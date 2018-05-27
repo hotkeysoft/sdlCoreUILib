@@ -152,7 +152,7 @@ namespace CoreUI
 			throw std::invalid_argument("id is null");
 		}
 
-		MenuItemPtr item = MenuItem::Create(m_renderer, id, name, nullptr);
+		MenuItemPtr item = MenuItem::Create(m_renderer, id, name, nullptr, nullptr);
 		item->SetParent(this);
 		item->Init();
 		m_lineHeight = item->m_label->GetRect(true, false).h;

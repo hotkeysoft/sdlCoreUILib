@@ -39,7 +39,7 @@ namespace CoreUI
 
 		static MenuPtr Create(RendererRef renderer, const char * id);
 
-		MenuItemPtr AddMenuItem(const char * id, const char * name, SDL_Keycode hotkey = SDLK_UNKNOWN);
+		MenuItemPtr AddMenuItem(const char * id, const char * name, SDL_Keycode hotkey = SDLK_UNKNOWN);		
 
 		bool HandleEvent(SDL_Event *) override;
 		HitResult HitTest(const PointRef) override;

@@ -5,25 +5,27 @@
 #include "Image.h"
 #include "Util\RenderTarget.h"
 
+#define MENUICONSIZE 16
+
 namespace CoreUI
 {
-	MenuItem::MenuItem(RendererRef renderer, const char * id, const char * name, MenuItemRef parent) : 
-		Widget(id, renderer, parent, Rect(), name), m_opened(false)
+	MenuItem::MenuItem(RendererRef renderer, const char * id, const char * name, ImageRef image, MenuItemRef parent) : 
+		Widget(id, renderer, parent, Rect(), name, image), m_opened(false)
 	{
 		if (m_renderer == nullptr)
 		{
 			throw std::invalid_argument("no renderer");
 		}
-
+		
 		m_margin = 0;
 		m_padding = 4;
 		m_showBorder = false;
 		m_borderWidth = 1;
 	}
 
-	MenuItemPtr MenuItem::Create(RendererRef renderer, const char * id, const char * name, MenuItemRef parent)
+	MenuItemPtr MenuItem::Create(RendererRef renderer, const char * id, const char * name, ImageRef image, MenuItemRef parent)
 	{
-		auto ptr = std::make_shared<shared_enabler>(renderer, id, name, parent);
+		auto ptr = std::make_shared<shared_enabler>(renderer, id, name, image, parent);
 		return std::static_pointer_cast<MenuItem>(ptr);
 	}
 
@@ -133,6 +135,11 @@ namespace CoreUI
 
 	MenuItemPtr MenuItem::AddMenuItem(const char * id, const char * name, SDL_Keycode hotkey)
 	{
+		return AddMenuItem(id, name, nullptr, hotkey);
+	}
+
+	MenuItemPtr MenuItem::AddMenuItem(const char * id, const char * name, ImageRef image, SDL_Keycode hotkey)
+	{
 		m_renderedMenu = nullptr; // Force render next time menu is drawn
 
 		if (id == nullptr)
@@ -140,7 +147,7 @@ namespace CoreUI
 			throw std::invalid_argument("id is null");
 		}
 
-		MenuItemPtr item = MenuItem::Create(m_renderer, id, name, this);
+		MenuItemPtr item = MenuItem::Create(m_renderer, id, name, image, this);
 		item->Init();
 
 		m_items.push_back(item);
@@ -182,7 +189,7 @@ namespace CoreUI
 			{
 				item->Init();
 				Rect labelRect = item->m_label->GetRect(true, false);
-				labelRect.w += 16+8; // Space for icon + right arrow for submenus
+				labelRect.w += MENUICONSIZE + 8; // Space for icon + right arrow for submenus
 				m_renderedMenuRect.w = std::max(labelRect.w, m_renderedMenuRect.w);
 				m_renderedMenuRect.h += labelRect.h;
 			}
@@ -204,7 +211,7 @@ namespace CoreUI
 				DrawFilledRect(&m_renderedMenuRect, active ? m_selectedBgColor : m_backgroundColor);
 				// Icon area
 				Rect iconArea = m_renderedMenuRect;
-				iconArea.w = 16 + GetShrinkFactor().w*2 + 2;
+				iconArea.w = MENUICONSIZE + GetShrinkFactor().w*2 + 2;
 				SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 				DrawFilledRect(&iconArea, Color(255, 255, 255, 45));
 				SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_NONE);
@@ -223,12 +230,12 @@ namespace CoreUI
 						{
 							Rect imageRect = target;
 							imageRect.x += 2;
-							imageRect.w = 16+2;
+							imageRect.w = MENUICONSIZE + 2;
 							item->m_image->Draw(&imageRect, Image::IMG_V_CENTER | Image::IMG_H_CENTER);
 						}
 
 						{
-							labelRect = Rect(target.x + 16+6, target.y, target.w - (16+6), target.h);
+							labelRect = Rect(target.x + MENUICONSIZE + 6, target.y, target.w - (MENUICONSIZE + 6), target.h);
 							LabelPtr & label = active ? item->m_activeLabel : item->m_label;
 
 							label->Draw(&labelRect, true);
