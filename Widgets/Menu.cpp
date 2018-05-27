@@ -199,8 +199,7 @@ namespace CoreUI
 			{
 				if (item)
 				{
-					item->m_label->Init();
-					item->m_renderedMenu = nullptr;
+					item->Init();
 				}
 			}
 			return false; // Pass through wm events
