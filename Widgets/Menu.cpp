@@ -191,6 +191,21 @@ namespace CoreUI
 
 	bool Menu::HandleEvent(SDL_Event * e)
 	{
+		static Uint32 wmEvent = WINMGR().GetEventType();
+
+		if (e->type == wmEvent && e->user.code == EVENT_WINDOWMANAGER_DISPLAYCHANGED)
+		{
+			for (auto & item : m_items)
+			{
+				if (item)
+				{
+					item->m_label->Init();
+					item->m_renderedMenu = nullptr;
+				}
+			}
+			return false; // Pass through wm events
+		}
+
 		Point pt(e->button.x, e->button.y);
 		HitResult hit = HitTest(&pt);
 		const CaptureInfo & capture = WINMGR().GetCapture();

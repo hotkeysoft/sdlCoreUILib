@@ -211,12 +211,13 @@ namespace CoreUI
 	void Label::RenderLabel()
 	{
 		size_t underlinePos = -1;
+		std::string toRender = m_text;
 		if (m_flags & LCF_MENUITEM)
 		{
-			underlinePos = RemoveAmpersands();
+			toRender = RemoveAmpersands(underlinePos);
 		}
 
-		SDL_Surface* label = TTF_RenderText_Blended(m_font, m_text.c_str(), m_foregroundColor);
+		SDL_Surface* label = TTF_RenderText_Blended(m_font, toRender.c_str(), m_foregroundColor);
 		m_labelText = SurfaceToTexture(label);
 
 		SDL_QueryTexture(m_labelText.get(), NULL, NULL, &m_labelRect.w, &m_labelRect.h);
@@ -256,6 +257,14 @@ namespace CoreUI
 				SDL_RenderDrawLine(m_renderer, xPos, m_labelRect.h - 3, xPos + width, m_labelRect.h - 3);
 				m_labelText = std::move(clone);
 			}
+			else
+			{
+				std::cerr << "Unable to set render target" << std::endl;
+			}
+		}
+		else
+		{
+			std::cerr << "Unable to set clone texture" << std::endl;
 		}
 	}
 
@@ -276,16 +285,17 @@ namespace CoreUI
 	}
 
 	// TODO: Allow escaping, like "This && That"
-	size_t Label::RemoveAmpersands()
+	std::string Label::RemoveAmpersands(size_t &underlinePos)
 	{
-		size_t index = m_text.find_first_of("&");
+		std::string ret = m_text;
+		underlinePos = ret.find_first_of("&");
 
-		if (index != -1)
+		if (underlinePos != -1)
 		{
-			m_text.erase(std::remove(m_text.begin(), m_text.end(), '&'), m_text.end());
+			ret.erase(std::remove(ret.begin(), ret.end(), '&'), ret.end());
 		}
 
-		return index;
+		return ret;
 	}
 
 	struct Label::shared_enabler : public Label

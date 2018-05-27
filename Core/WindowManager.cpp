@@ -15,10 +15,13 @@ namespace CoreUI
 		return manager;
 	}
 
-	void WindowManager::Init(RendererPtr & renderer)
+	void WindowManager::Init(SDL_Window * window, RendererPtr & renderer)
 	{
+		m_window = window;
 		m_renderer = renderer.get();
 		GetEventType("timer");
+
+		LoadScreenResolutions();
 	}
 
 	void WindowManager::Draw()
@@ -33,6 +36,12 @@ namespace CoreUI
 		{
 			m_activeWindow->DrawMenu();
 		}
+	}
+
+	WindowPtr WindowManager::AddWindowFill(const char * id, CreationFlags flags)
+	{
+
+		return AddWindow(id, nullptr, Rect(), flags | WIN_FILL);
 	}
 
 	WindowPtr WindowManager::AddWindow(const char * id, Rect pos, CreationFlags flags)
@@ -254,4 +263,103 @@ namespace CoreUI
 		}
 		return (Uint32)-1;
 	}
+
+	bool WindowManager::IsFullscreen() const
+	{
+		return SDL_GetWindowFlags(m_window) & SDL_WINDOW_FULLSCREEN;
+	}
+
+	void WindowManager::ToggleFullscreen() 
+	{
+		SDL_SetWindowFullscreen(m_window, IsFullscreen() ? 0 : SDL_WINDOW_FULLSCREEN);
+		SDL_ShowCursor(1);
+		PostEvent(EVENT_WINDOWMANAGER_DISPLAYCHANGED);
+	}
+
+	ScreenResolution WindowManager::GetScreenResolution() const
+	{
+		SDL_DisplayMode mode;
+		SDL_GetCurrentDisplayMode(0, &mode);
+		ScreenResolution res = { -1, mode.w, mode.h };
+		return res;
+	}
+
+	void WindowManager::SetScreenResolution(int modeId)
+	{
+		SDL_DisplayMode mode;
+		if (SDL_GetDisplayMode(0, modeId, &mode) == -1)
+		{
+			std::cout << "Cannot find mode " << modeId << std::endl;
+			return;
+		}
+
+		if (IsFullscreen())
+		{
+			SDL_SetWindowFullscreen(m_window, 0);
+			SDL_SetWindowDisplayMode(m_window, &mode);
+			SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN);
+		}
+		else
+		{
+			SDL_SetWindowSize(m_window, mode.w, mode.h);
+		}
+
+		PostEvent(EVENT_WINDOWMANAGER_DISPLAYCHANGED);	
+
+		m_windowSize.Clear();
+	}
+
+	Rect WindowManager::GetWindowSize() const
+	{
+		if (m_windowSize.IsEmpty())
+		{
+			SDL_GetWindowSize(m_window, &m_windowSize.w, &m_windowSize.h);
+		}
+
+		return m_windowSize;
+	}
+
+	int WindowManager::LoadScreenResolutions()
+	{
+		m_screenResolutions.clear();
+		static int display_in_use = 0; /* Only using first display */
+
+		int i, display_mode_count;
+		SDL_DisplayMode mode;
+
+		display_mode_count = SDL_GetNumDisplayModes(display_in_use);
+		if (display_mode_count < 1) {
+			SDL_Log("SDL_GetNumDisplayModes failed: %s", SDL_GetError());
+			return 1;
+		}
+
+		for (i = 0; i < display_mode_count; ++i) {
+			if (SDL_GetDisplayMode(display_in_use, i, &mode) != 0) {
+				SDL_Log("SDL_GetDisplayMode failed: %s", SDL_GetError());
+				return 1;
+			}
+
+			if (mode.h < 720)
+				continue;
+			m_screenResolutions.insert({ i, mode.w, mode.h });
+		}
+
+		return 0;
+	}
+
+	void WindowManager::PostEvent(EventCode code, void * data1, void * data2)
+	{
+		static Uint32 type = GetEventType("winmgr");
+
+		SDL_Event toPost;
+		SDL_zero(toPost);
+
+		toPost.type = type;
+		toPost.user.code = code;
+		toPost.user.data1 = data1;
+		toPost.user.data2 = data2;
+
+		SDL_PushEvent(&toPost);
+	}
+
 }

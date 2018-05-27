@@ -48,6 +48,8 @@ namespace CoreUI
 		Rect() : SDL_Rect({ 0, 0, 0, 0 }) {}
 		Rect(int x, int y, int w, int h) : SDL_Rect({ x, y, w, h }) {};
 
+		void Clear() { x = y = w = h = 0; }
+
 		bool IsEmpty() const;
 		bool IsEqual(const RectRef other) const;
 

@@ -34,6 +34,7 @@ namespace CoreUI
 		m_flags(flags),
 		m_eventClassId(Uint32(-1))
 	{
+		m_tag.o = nullptr;
 		SetFont(font);
 	}
 

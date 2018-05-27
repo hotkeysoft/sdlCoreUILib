@@ -67,7 +67,6 @@ namespace CoreUI
 		void SetAlign(uint8_t align);
 		uint8_t GetAlign() { return m_labelAlign;  }
 
-
 	protected:
 		Label(const char* id, RendererRef renderer, Rect rect, const char* label, FontRef font, TextAlign align, CreationFlags flags);
 
@@ -77,7 +76,7 @@ namespace CoreUI
 		void DrawUnderline(const size_t &underlinePos);
 		void DrawLabel(RectRef rect);
 
-		size_t RemoveAmpersands(); // Returns position of first ampersand, -1 if not found
+		std::string RemoveAmpersands(size_t & underlinePos); // Returns updated string, position of first ampersand in underlinePos, -1 if not found
 
 		TexturePtr m_labelText;
 		Rect m_labelRect;

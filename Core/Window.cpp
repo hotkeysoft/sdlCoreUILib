@@ -126,6 +126,12 @@ namespace CoreUI
 	Rect Window::GetRect(bool relative, bool scrolled) const
 	{
 		Rect rect = m_rect;
+
+		if (m_parent == nullptr)
+		{
+			rect = WINMGR().GetWindowSize();
+		}
+		
 		if (m_showState & WindowState::WS_MAXIMIZED)
 		{
 			rect = GetParent()->GetClientRect(true, false);

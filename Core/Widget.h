@@ -22,7 +22,7 @@
 
 namespace CoreUI
 {
-	struct DllExport HitResult
+	struct HitResult
 	{
 		HitResult(HitZone z = HIT_NOTHING) : zone(z), target(nullptr) {}
 		HitResult(HitZone z, WidgetRef t) : zone(z), target(t) {}
@@ -34,6 +34,12 @@ namespace CoreUI
 
 		HitZone zone;
 		WidgetRef target;
+	};
+
+	union WidgetTag
+	{
+		int i;
+		void* o;
 	};
 
 	class DllExport Widget
@@ -120,6 +126,10 @@ namespace CoreUI
 
 		virtual std::string ToString() const { return ""; }
 
+		virtual WidgetTag GetTag() const { return m_tag; }
+		virtual void SetTag(int tag) { m_tag.i = tag; }
+		virtual void SetTag(void * tag) { m_tag.o = tag; }
+
 	protected:
 		Widget(const char* id, RendererRef renderer, WidgetRef parent, Rect rect,
 			const char* text, ImageRef image = nullptr, FontRef font = nullptr, CreationFlags flags = 0);
@@ -150,6 +160,7 @@ namespace CoreUI
 		FontRef m_font;
 		Point m_scrollPos;
 		bool m_focused;
+		WidgetTag m_tag;
 
 		// Borders
 		bool m_showBorder;

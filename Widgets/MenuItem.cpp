@@ -33,6 +33,8 @@ namespace CoreUI
 
 		m_label->SetPadding(Dimension(8, 2));
 		m_label->Init();
+		m_renderedMenu = nullptr;
+		m_renderedMenuRect = Rect();
 	}
 
 	void MenuItem::Draw(const PointRef pos)
@@ -168,6 +170,7 @@ namespace CoreUI
 		{
 			if (item)
 			{
+				item->Init();
 				Rect labelRect = item->m_label->GetRect(true, false);
 				m_renderedMenuRect.w = std::max(labelRect.w, m_renderedMenuRect.w);
 				m_renderedMenuRect.h += labelRect.h;
@@ -189,7 +192,7 @@ namespace CoreUI
 			{
 				DrawFilledRect(&m_renderedMenuRect, m_backgroundColor);
 				Draw3dFrame(&m_renderedMenuRect, true);
-
+				
 				Rect target = m_renderedMenuRect.Deflate(GetShrinkFactor());
 
 				for (auto & item : m_items)
@@ -223,8 +226,15 @@ namespace CoreUI
 
 				m_renderedMenu = TexturePtr(texture, sdl_deleter());
 			}
+			else
+			{
+				std::cerr << "Unable to set render target" << std::endl;
+			}
 		}
-
+		else
+		{
+			std::cerr << "Unable to create texture target" << std::endl;
+		}
 	}
 
 	struct MenuItem::shared_enabler : public MenuItem
