@@ -73,7 +73,7 @@ namespace CoreUI
 		void DrawBackground(const CoreUI::RectRef &rect);
 		Rect DrawFrame(const CoreUI::RectRef &rect);
 		void RenderLabel();
-		void DrawUnderline(const size_t &underlinePos);
+		void DrawUnderline(const std::string &str, const size_t &underlinePos);
 		void DrawLabel(RectRef rect);
 
 		std::string RemoveAmpersands(size_t & underlinePos); // Returns updated string, position of first ampersand in underlinePos, -1 if not found
