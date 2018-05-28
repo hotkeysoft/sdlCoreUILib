@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "ImageMap.h"
+#include "ResourceMap.h"
 
 namespace CoreUI
 {
@@ -20,6 +21,13 @@ namespace CoreUI
 		return (imageMap->LoadFromFile(fileName)) ? imageMap : nullptr;
 	}
 
+	ImageMapPtr ImageMap::FromResource(RendererRef renderer, ResourceMap::ResourceInfo & res)
+	{
+		auto ptr = std::make_shared<shared_enabler>(renderer, res.i1, res.i2);
+		ImageMapPtr imageMap = std::static_pointer_cast<ImageMap>(ptr);
+		return (imageMap->LoadFromResource(res)) ? imageMap : nullptr;
+	}
+
 	bool ImageMap::LoadFromFile(const char* fileName)
 	{
 		if (!Image::LoadFromFile(fileName))
@@ -28,6 +36,22 @@ namespace CoreUI
 			return false;
 		}
 		
+		return PostLoad();
+	}
+
+	bool ImageMap::LoadFromResource(ResourceMap::ResourceInfo & res)
+	{
+		if (!Image::LoadFromResource(res))
+		{
+			m_texture = nullptr;
+			return false;
+		}
+
+		return PostLoad();
+	}
+
+	bool ImageMap::PostLoad()
+	{
 		if (m_rect.w % m_tileWidth != 0)
 		{
 			std::cerr << "imagemap width is not a multiple of tileWidth" << std::endl;
@@ -44,7 +68,7 @@ namespace CoreUI
 		m_cols = m_rect.w / m_tileWidth;
 		m_rows = m_rect.h / m_tileHeight;
 
-		m_tiles.resize(m_tileWidth * m_tileHeight);
+		m_tiles.resize(m_cols * m_rows);
 
 		return true;
 	}

@@ -2,6 +2,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Image.h"
+#include "ResourceMap.h"
+#include "Util\WinResource.h"
 
 namespace CoreUI
 {
@@ -34,9 +36,37 @@ namespace CoreUI
 		return (image->LoadFromMap(texture, subset)) ? image : nullptr;
 	}
 
+	ImagePtr Image::FromResource(RendererRef renderer, ResourceMap::ResourceInfo & res)
+	{
+		auto ptr = std::make_shared<shared_enabler>(renderer);
+		ImagePtr image = std::static_pointer_cast<Image>(ptr);
+		return (image->LoadFromResource(res)) ? image : nullptr;
+	}
+
 	bool Image::LoadFromFile(const char* fileName)
 	{
 		m_texture = TexturePtr(IMG_LoadTexture(m_renderer, fileName), sdl_deleter());
+		if (m_texture)
+		{
+			SDL_QueryTexture(m_texture.get(), NULL, NULL, &m_rect.w, &m_rect.h);
+			m_rect.x = 0;
+			m_rect.y = 0;
+			return true;
+		}
+		m_rect = Rect();
+		return false;
+	}
+
+	bool Image::LoadFromResource(ResourceMap::ResourceInfo & res)
+	{
+		WinUtil::WinResource::DllResource resource = WinUtil::WinResource::LoadResource(res.winResId, res.winResType);
+		if (!resource.IsLoaded())
+		{
+			std::cerr << "Window resource not found: " << res.winResId << " while loading font " << res.id << std::endl;
+			return false;
+		}
+
+		m_texture = TexturePtr(IMG_LoadTexture_RW(m_renderer, SDL_RWFromConstMem(resource.data, resource.size), 0), sdl_deleter());
 		if (m_texture)
 		{
 			SDL_QueryTexture(m_texture.get(), NULL, NULL, &m_rect.w, &m_rect.h);
@@ -78,10 +108,10 @@ namespace CoreUI
 
 	void Image::Draw(const PointRef pos)
 	{
-		Rect rect = m_rect.Offset(pos);
+		Rect target = Rect(pos->x, pos->y, m_rect.w, m_rect.h);
 		if (m_texture && m_renderer)
 		{
-			SDL_RenderCopy(m_renderer, m_texture.get(), &m_rect, &rect);
+			SDL_RenderCopy(m_renderer, m_texture.get(), &m_rect, &target);
 		}
 	}
 	

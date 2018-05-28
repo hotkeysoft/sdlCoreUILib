@@ -73,7 +73,7 @@ namespace CoreUI
 	{
 		if (font == nullptr)
 		{
-			m_font = RES().FindFont("default");
+			m_font = RES().FindFont("coreUI.default");
 			if (m_font == nullptr)
 			{
 				throw std::exception("Unable to load default font");

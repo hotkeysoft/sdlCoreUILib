@@ -243,10 +243,14 @@ namespace CoreUI
 						}
 						if (item->HasSubMenu())
 						{
-							static ImageRef image = RES().FindImage("win.widget8x12", 1);
+							static ImageRef image = RES().FindImage("coreUI.widget8x12", 1);
 							if (image)
 							{
 								image->Draw(&target.Deflate(1), Image::IMG_H_RIGHT | Image::IMG_V_CENTER);
+							}
+							else
+							{
+								std::cerr << "Image map not found: coreUI.widget8x12" << std::endl;
 							}
 						}
 

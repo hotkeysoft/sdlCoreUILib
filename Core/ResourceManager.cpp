@@ -5,6 +5,8 @@
 #include "ResourceManager.h"
 #include "Widgets\Image.h"
 #include "Widgets\ImageMap.h"
+#include "Util\WinResource.h"
+#include "ResourceMap.h"
 
 namespace CoreUI
 {
@@ -17,6 +19,35 @@ namespace CoreUI
 	void ResourceManager::Init(RendererPtr & renderer)
 	{
 		m_renderer = renderer.get();
+
+		LoadInternalResources();
+	}
+
+	void ResourceManager::LoadInternalResources()
+	{
+		for (auto & res : ResourceMap::g_ResourceMap)
+		{
+			LoadInternalResource(res);
+		}
+	}
+
+	void ResourceManager::LoadInternalResource(ResourceMap::ResourceInfo & res)
+	{
+		std::cout << "Loading internal resource: " << res.id << std::endl;
+		switch (res.type)
+		{
+		case ResourceMap::RES_IMAGEMAP:
+			LoadImageMap(res);
+			break;
+		case ResourceMap::RES_IMAGE:
+			LoadImage(res);
+			break;
+		case ResourceMap::RES_FONT:
+			LoadFont(res);
+			break;
+		default:
+			std::cerr << "Resource type not supported" << res.type << std::endl;
+		}
 	}
 
 	FontRef ResourceManager::LoadFont(const char * id, const char * fileName, size_t size)
@@ -39,6 +70,35 @@ namespace CoreUI
 
 		return ref;
 	}
+
+	FontRef ResourceManager::LoadFont(ResourceMap::ResourceInfo & res)
+	{
+		if (res.id == nullptr || res.winResId == 0 || res.winResType == nullptr || res.i1 < 1)
+		{
+			throw std::invalid_argument("id or resourceID or size is null");
+		}
+		if (m_fonts.find(res.id) != m_fonts.end())
+		{
+			throw std::invalid_argument("font id already loaded: " + std::string(res.id));
+		}
+
+		WinUtil::WinResource::DllResource resource = WinUtil::WinResource::LoadResource(res.winResId, res.winResType);
+		if (!resource.IsLoaded())
+		{
+			std::cerr << "Window resource not found: " << res.winResId << " while loading font " << res.id << std::endl;
+			return nullptr;
+		}
+		
+		FontPtr font = FontPtr(TTF_OpenFontRW(SDL_RWFromConstMem(resource.data, resource.size), 0, res.i1), sdl_deleter());
+		FontRef ref = font.get();
+		if (font != nullptr)
+		{
+			m_fonts[res.id] = std::move(font);
+		}
+
+		return ref;
+	}
+
 
 	FontRef ResourceManager::FindFont(const char * id)
 	{
@@ -74,9 +134,33 @@ namespace CoreUI
 		}
 		else
 		{
-			std::cerr << "Image not loaded" << fileName << std::endl;
+			std::cerr << "Image not loaded " << fileName << std::endl;
 		}
 		
+		return image.get();
+	}
+
+	ImageRef ResourceManager::LoadImage(ResourceMap::ResourceInfo & res)
+	{
+		if (res.id == nullptr || res.winResId == 0 || res.winResType == nullptr)
+		{
+			throw std::invalid_argument("id or resourceID is null");
+		}
+		if (m_images.find(res.id) != m_images.end())
+		{
+			throw std::invalid_argument("image id already loaded: " + std::string(res.id));
+		}
+
+		ImagePtr image = Image::FromResource(m_renderer, res);
+		if (image != nullptr)
+		{
+			m_images[res.id] = image;
+		}
+		else
+		{
+			std::cerr << "Image not loaded " << res.id << ", internal resource id: " << res.winResId << std::endl;
+		}
+
 		return image.get();
 	}
 
@@ -94,11 +178,33 @@ namespace CoreUI
 		ImageMapPtr image = ImageMap::FromFile(m_renderer, fileName, tileWidth, tileHeight);
 		if (image == nullptr)
 		{
-			std::cerr << "Image not loaded" << fileName << std::endl;
+			std::cerr << "Image map not loaded " << fileName << std::endl;
 			return nullptr;
 		}
 
 		m_images[id] = image;
+		return image.get();
+	}
+
+	ImageMapRef ResourceManager::LoadImageMap(ResourceMap::ResourceInfo & res)
+	{
+		if (res.id == nullptr || res.winResId == 0 || res.winResType == nullptr)
+		{
+			throw std::invalid_argument("id or winResId is null");
+		}
+		if (m_images.find(res.id) != m_images.end())
+		{
+			throw std::invalid_argument("image id already loaded: " + std::string(res.id));
+		}
+
+		ImageMapPtr image = ImageMap::FromResource(m_renderer, res);
+		if (image == nullptr)
+		{
+			std::cerr << "Image map not loaded " << res.id << ", internal resource id: " << res.winResId << std::endl;
+			return nullptr;
+		}
+
+		m_images[res.id] = image;
 		return image.get();
 	}
 

@@ -13,6 +13,11 @@
 #define DllExport __declspec(dllimport)  
 #endif
 
+namespace ResourceMap
+{
+	struct ResourceInfo;
+}
+
 namespace CoreUI
 {
 	class DllExport Image : public Widget
@@ -43,6 +48,7 @@ namespace CoreUI
 		static ImagePtr FromFile(RendererRef renderer, const char* fileName);
 		static ImagePtr FromTexture(RendererRef renderer, TexturePtr texture);
 		static ImagePtr FromMap(RendererRef renderer, TexturePtr texture, RectRef subset);
+		static ImagePtr FromResource(RendererRef renderer, ResourceMap::ResourceInfo & res);
 
 		explicit operator bool() const { return IsSet(); }
 
@@ -54,9 +60,10 @@ namespace CoreUI
 	protected:
 		Image(RendererRef renderer);
 
-		bool LoadFromFile(const char* fileName);
-		bool LoadFromTexture(TexturePtr);
-		bool LoadFromMap(TexturePtr, RectRef);
+		virtual bool LoadFromFile(const char* fileName);
+		virtual bool LoadFromTexture(TexturePtr);
+		virtual bool LoadFromMap(TexturePtr, RectRef);
+		virtual bool LoadFromResource(ResourceMap::ResourceInfo & res);
 
 		TexturePtr m_texture;
 

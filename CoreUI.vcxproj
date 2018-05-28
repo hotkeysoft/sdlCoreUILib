@@ -177,10 +177,12 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Core\Widget.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\WindowManager.cpp" />
+    <ClCompile Include="ResourceMap.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Util\WinResource.cpp" />
     <ClCompile Include="Widgets\Button.cpp" />
     <ClCompile Include="Widgets\Image.cpp" />
     <ClCompile Include="Widgets\ImageMap.cpp" />
@@ -207,9 +209,12 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Core\Widget.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\WindowManager.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ResourceMap.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Util\ClipRect.h" />
     <ClInclude Include="Util\RenderTarget.h" />
+    <ClInclude Include="Util\WinResource.h" />
     <ClInclude Include="Widgets\Button.h" />
     <ClInclude Include="Widgets\Image.h" />
     <ClInclude Include="Widgets\ImageMap.h" />
@@ -221,6 +226,19 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Widgets\Toolbar.h" />
     <ClInclude Include="Widgets\ToolbarItem.h" />
     <ClInclude Include="Widgets\Tree.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CoreUI.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\widget15x15.png" />
+    <Image Include="Resources\widget24x24.png" />
+    <Image Include="Resources\widget8x12.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\FiraMono-Regular.ttf" />
+    <Font Include="Resources\Oxygen-Bold.ttf" />
+    <Font Include="Resources\Oxygen-Regular.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,6 +12,11 @@
 #define DllExport __declspec(dllimport)  
 #endif
 
+namespace ResourceMap
+{
+	struct ResourceInfo;
+}
+
 namespace CoreUI
 {
 	class DllExport ResourceManager
@@ -45,6 +50,13 @@ namespace CoreUI
 		CursorRef FindCursor(const char * id);
 
 	protected:
+		FontRef LoadFont(ResourceMap::ResourceInfo & res);
+		ImageMapRef LoadImageMap(ResourceMap::ResourceInfo & res);
+		ImageRef LoadImage(ResourceMap::ResourceInfo & res);
+
+		void LoadInternalResources();
+		void LoadInternalResource(ResourceMap::ResourceInfo & res);
+
 		ResourceManager() : m_renderer(nullptr) {}
 		RendererRef m_renderer;
 		FontList m_fonts;

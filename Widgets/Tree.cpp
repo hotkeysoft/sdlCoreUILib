@@ -189,8 +189,8 @@ namespace CoreUI
 
 		if (m_flags & TCF_HASBUTTONS)
 		{
-			static ImageRef openButton = RES().FindImage("win.widget8x12", 2);
-			static ImageRef closeButton = RES().FindImage("win.widget8x12", 0);
+			static ImageRef openButton = RES().FindImage("coreUI.widget8x12", 2);
+			static ImageRef closeButton = RES().FindImage("coreUI.widget8x12", 0);
 
 			node->m_buttonRect = Rect(target.x, target.y, 8, m_lineHeight);
 

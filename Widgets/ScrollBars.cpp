@@ -36,6 +36,9 @@ namespace CoreUI
 
 	void ScrollBars::DrawHScrollBar(RectRef pos)
 	{		
+		static ImageRef leftButton = RES().FindImage("coreUI.widget15x15", 2);
+		static ImageRef rightButton = RES().FindImage("coreUI.widget15x15", 3);
+
 		DrawButton(pos, Color::C_MED_GREY, nullptr, false);
 
 		int scrollAreaWidth = pos->w - (2 * m_scrollBarSize);
@@ -43,8 +46,8 @@ namespace CoreUI
 		m_scrollState.rightButton = { pos->x + pos->w - m_scrollBarSize, pos->y, m_scrollBarSize, m_scrollBarSize };
 		m_scrollState.hScrollArea = { pos->x + m_scrollBarSize, pos->y, scrollAreaWidth, m_scrollBarSize };
 
-		DrawButton(&m_scrollState.leftButton, Color::C_LIGHT_GREY, RES().FindImage("win.scroll.left"), !m_parent->GetPushedState(HIT_HSCROLL_LEFT));
-		DrawButton(&m_scrollState.rightButton, Color::C_LIGHT_GREY, RES().FindImage("win.scroll.right"), !m_parent->GetPushedState(HIT_HSCROLL_RIGHT));
+		DrawButton(&m_scrollState.leftButton, Color::C_LIGHT_GREY, leftButton, !m_parent->GetPushedState(HIT_HSCROLL_LEFT));
+		DrawButton(&m_scrollState.rightButton, Color::C_LIGHT_GREY, rightButton, !m_parent->GetPushedState(HIT_HSCROLL_RIGHT));
 
 		int fullWidth = m_scrollState.hMax + pos->w;
 		int sliderWidth = pos->w * scrollAreaWidth / fullWidth;
@@ -66,6 +69,9 @@ namespace CoreUI
 
 	void ScrollBars::DrawVScrollBar(RectRef pos)
 	{
+		static ImageRef upButton = RES().FindImage("coreUI.widget15x15", 0);
+		static ImageRef downButton = RES().FindImage("coreUI.widget15x15", 1);
+
 		DrawButton(pos, Color::C_MED_GREY, nullptr, false);
 
 		int scrollAreaHeight = pos->h - (2 * m_scrollBarSize);
@@ -73,8 +79,8 @@ namespace CoreUI
 		m_scrollState.downButton = { pos->x, pos->y + pos->h - m_scrollBarSize, m_scrollBarSize, m_scrollBarSize };
 		m_scrollState.vScrollArea = { pos->x, pos->y + m_scrollBarSize, m_scrollBarSize, scrollAreaHeight };
 
-		DrawButton(&m_scrollState.upButton, Color::C_LIGHT_GREY, RES().FindImage("win.scroll.up"), !m_parent->GetPushedState(HIT_VSCROLL_UP));
-		DrawButton(&m_scrollState.downButton, Color::C_LIGHT_GREY, RES().FindImage("win.scroll.down"), !m_parent->GetPushedState(HIT_VSCROLL_DOWN));
+		DrawButton(&m_scrollState.upButton, Color::C_LIGHT_GREY, upButton, !m_parent->GetPushedState(HIT_VSCROLL_UP));
+		DrawButton(&m_scrollState.downButton, Color::C_LIGHT_GREY, downButton, !m_parent->GetPushedState(HIT_VSCROLL_DOWN));
 		
 		int fullHeight = m_scrollState.vMax + pos->h;
 		int sliderHeight = pos->h * scrollAreaHeight / fullHeight;

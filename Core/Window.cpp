@@ -79,12 +79,12 @@ namespace CoreUI
 
 	void Window::DrawMinMaxButtons(Rect pos, const CoreUI::Color & col)
 	{
-		const char * resStr = (m_showState & WindowState::WS_MINIMIZED) ? "win.restore" : "win.minimize";
-		DrawButton(&GetMinimizeButtonRect(pos), col, RES().FindImage(resStr), !(m_pushedState & HIT_MINBUTTON));
+		static ImageRef minimizeButton = RES().FindImage("coreUI.widget24x24", 0);
+		static ImageRef maximizeButton = RES().FindImage("coreUI.widget24x24", 1);
+		static ImageRef restoreButton = RES().FindImage("coreUI.widget24x24", 2);
 
-		resStr = (m_showState & WindowState::WS_MAXIMIZED) ? "win.restore" : "win.maximize";
-
-		DrawButton(&GetMaximizeButtonRect(pos), col, RES().FindImage(resStr), !(m_pushedState & HIT_MAXBUTTON));
+		DrawButton(&GetMinimizeButtonRect(pos), col, (m_showState & WindowState::WS_MINIMIZED) ? restoreButton : minimizeButton, !(m_pushedState & HIT_MINBUTTON));
+		DrawButton(&GetMaximizeButtonRect(pos), col, (m_showState & WindowState::WS_MAXIMIZED) ? restoreButton : maximizeButton, !(m_pushedState & HIT_MAXBUTTON));
 	}
 
 	WindowManager::WindowList Window::GetChildWindows()
@@ -543,10 +543,10 @@ namespace CoreUI
 
 	void Window::RenderTitle()
 	{
-		FontRef titleFont = RES().FindFont("win.title");
+		FontRef titleFont = RES().FindFont("coreUI.defaultBold");
 		if (titleFont == nullptr)
 		{
-			std::cout << "win.title font not found";
+			std::cerr << "win.title font not found, using default" << std::endl;
 			titleFont = m_font;
 		}
 		if (titleFont == nullptr)
