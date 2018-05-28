@@ -35,6 +35,7 @@ namespace CoreUI
 		static ResourceManager & Get();
 
 		void Init(RendererPtr & renderer);
+		void Dispose();
 
 		// Fonts
 		FontRef LoadFont(const char * id, const char * fileName, size_t size);

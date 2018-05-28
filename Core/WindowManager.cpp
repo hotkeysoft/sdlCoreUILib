@@ -24,6 +24,20 @@ namespace CoreUI
 		LoadScreenResolutions();
 	}
 
+	void WindowManager::Dispose()
+	{
+		m_activeWindow = nullptr;
+		m_capture = CaptureInfo();
+		m_windowSize = Rect();
+		m_screenResolutions.clear();
+
+		m_registeredEvents.clear();
+		m_registeredEventsReverse.clear();
+		m_timers.clear();
+
+		m_windows.clear();
+	}
+
 	void WindowManager::Draw()
 	{
 		for (auto & window : m_windows)

@@ -23,6 +23,14 @@ namespace CoreUI
 		LoadInternalResources();
 	}
 
+	void ResourceManager::Dispose()
+	{
+		m_fonts.clear();
+		m_images.clear();
+		m_cursors.clear();
+		m_renderer = nullptr;
+	}
+
 	void ResourceManager::LoadInternalResources()
 	{
 		for (auto & res : ResourceMap::g_ResourceMap)

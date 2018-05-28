@@ -158,7 +158,10 @@ namespace CoreUI
 				source.w = target.w;
 			}
 
-			SDL_RenderCopy(m_renderer, line.texture.get(), &source, &target);
+			if (line.texture)
+			{
+				SDL_RenderCopy(m_renderer, line.texture.get(), &source, &target);
+			}
 		}
 	}
 
