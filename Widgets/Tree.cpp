@@ -159,7 +159,7 @@ namespace CoreUI
 	void Tree::DrawTree(const RectRef & rect)
 	{
 		int line = 0;
-		for (auto node : m_nodes)
+		for (auto & node : m_nodes)
 		{
 			if (node->IsVisible())
 			{
@@ -206,7 +206,7 @@ namespace CoreUI
 	void Tree::RenderNodes()
 	{
 		int maxWidth = 0;
-		for (auto node : m_nodes)
+		for (auto & node : m_nodes)
 		{
 			node->Render();
 
@@ -466,7 +466,7 @@ namespace CoreUI
 
 	void Tree::SelectNode(TreeNodeRef node)
 	{
-		for (auto node : m_nodes)
+		for (auto & node : m_nodes)
 		{
 			node->m_selected = false;
 		}

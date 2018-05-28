@@ -534,7 +534,7 @@ namespace CoreUI
 		ClipRect clip(m_renderer, &GetClientRect(false, false));
 		if (clip)
 		{
-			for (auto ctrl : m_controls)
+			for (auto & ctrl : m_controls)
 			{
 				ctrl.second->Draw();
 			}
