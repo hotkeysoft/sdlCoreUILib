@@ -58,10 +58,12 @@ namespace CoreUI
 		{
 			return ((unsigned)(pt->y - m_labelRect.y) <= (m_labelRect.h));
 		}
-		else
+		else if (m_tree->GetFlags() & TCF_HASBUTTONS && m_buttonRect.PointInRect(pt))
 		{
-			return m_labelRect.PointInRect(pt);
+			return true;
 		}
+
+		return m_labelRect.PointInRect(pt);
 	}
 
 	Tree::Tree(const char* id, RendererRef renderer, int lineHeight, FontRef font, CreationFlags flags) :
@@ -185,6 +187,25 @@ namespace CoreUI
 			DrawFilledRect(&sel, m_selectedBgColor);
 		}
 
+		if (m_flags & TCF_HASBUTTONS)
+		{
+			static ImageRef openButton = RES().FindImage("win.widget8x12", 2);
+			static ImageRef closeButton = RES().FindImage("win.widget8x12", 0);
+
+			node->m_buttonRect = Rect(target.x, target.y, 8, m_lineHeight);
+
+			if (node->m_opened && NodeHasChildren(node) && closeButton)
+			{
+				closeButton->Draw(&node->m_buttonRect, Image::IMG_H_CENTER | Image::IMG_V_CENTER);
+			}
+			else if (NodeHasChildren(node) && openButton)
+			{
+				openButton->Draw(&node->m_buttonRect, Image::IMG_H_CENTER | Image::IMG_V_CENTER);
+			}
+			target.x += 8 + 2;
+			node->m_buttonRect.w += 2;
+		}
+
 		ImageRef image = (node->m_opened && NodeHasChildren(node)) ? node->m_openedImage : node->m_closedImage;
 
 		if (image)
@@ -200,6 +221,12 @@ namespace CoreUI
 			node->m_label->SetForegroundColor(node->IsSelected() ? m_selectedFgColor : m_foregroundColor);
 			node->m_label->Draw(&target);
 			node->m_labelRect = target;
+
+			if (image)
+			{
+				node->m_labelRect.x -= m_lineHeight;
+				node->m_labelRect.w += m_lineHeight;
+			}
 		}
 	}
 
@@ -303,7 +330,11 @@ namespace CoreUI
 			if (node)
 			{
 				SelectNode(node);
-				if (e->button.clicks == 2)
+				if ((m_flags & TCF_HASBUTTONS) && node->m_buttonRect.PointInRect(&pt))
+				{
+					ToggleNode(node);
+				} 
+				else if (e->button.clicks == 2)
 				{
 					ToggleNode(node);
 				}
@@ -335,7 +366,7 @@ namespace CoreUI
 
 	TreeNodeRef Tree::NodeAt(PointRef pt)
 	{
-		auto it = std::find_if(m_nodes.begin(), m_nodes.end(), [pt](TreeNodeRef node) { return node->Hit(pt); });
+		auto it = std::find_if(m_nodes.begin(), m_nodes.end(), [pt](TreeNodeRef node) { return node->IsVisible() && node->Hit(pt); });
 		if (it != m_nodes.end())
 		{
 			return *it;

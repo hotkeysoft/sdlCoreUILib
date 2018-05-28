@@ -243,7 +243,7 @@ namespace CoreUI
 						}
 						if (item->HasSubMenu())
 						{
-							static ImageRef image = RES().FindImage("menu.subitem");
+							static ImageRef image = RES().FindImage("win.widget8x12", 1);
 							if (image)
 							{
 								image->Draw(&target.Deflate(1), Image::IMG_H_RIGHT | Image::IMG_V_CENTER);

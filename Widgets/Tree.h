@@ -20,8 +20,9 @@ namespace CoreUI
 
 	enum TreeCreationFlags : CreationFlags 
 	{
-		TCF_FULLROWSELECT	=  WIN_CUSTOMBASE << 0,
-		TCF_HASLINES		=	WIN_CUSTOMBASE << 1,
+		TCF_FULLROWSELECT	= WIN_CUSTOMBASE << 0,
+		TCF_HASLINES		= WIN_CUSTOMBASE << 1,
+		TCF_HASBUTTONS		= WIN_CUSTOMBASE << 2,
 	};
 
 	class DllExport TreeNode
@@ -53,6 +54,7 @@ namespace CoreUI
 		std::string m_text;
 		LabelPtr m_label;
 		Rect m_labelRect;
+		Rect m_buttonRect;
 
 		TreeRef m_tree;
 		int m_depth;
