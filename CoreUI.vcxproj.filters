@@ -22,9 +22,11 @@
     </Filter>
     <Filter Include="Resource Files\Fonts">
       <UniqueIdentifier>{4412fcef-377d-4fb1-9727-d45b9291e488}</UniqueIdentifier>
+      <Extensions>ttf</Extensions>
     </Filter>
     <Filter Include="Resource Files\Images">
       <UniqueIdentifier>{5c8fb71c-63ca-40cd-abab-58a28d9cedc3}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
