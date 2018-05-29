@@ -38,6 +38,11 @@ namespace CoreUI
 			throw std::invalid_argument("WIN_MINMAX flag needs parent window");
 		}
 
+		if (m_flags & WIN_DIALOG)
+		{
+			m_borderWidth = 0;
+		}
+
 		m_scrollBars = ScrollBars::Create(renderer, this);
 
 		m_backgroundColor = Color::C_LIGHT_GREY;
@@ -314,9 +319,9 @@ namespace CoreUI
 		{
 			Rect target = GetTitleBarRect(rect);
 
-			target.x += m_borderWidth;
+			target.x += m_buttonSize/4;
 			target.y += (target.h - m_titleStrRect.h)/2;
-			target.w = std::min(m_titleStrRect.w, target.w - (2 * m_borderWidth));
+			target.w = std::min(m_titleStrRect.w, target.w - (m_buttonSize/2));
 			target.h = std::min(m_titleStrRect.h, target.h);
 
 			Rect source = { 0, 0, target.w, target.h };
@@ -457,8 +462,17 @@ namespace CoreUI
 		{
 			Rect rect = GetRect(false);
 
-			bool active = (WINMGR().GetActive() == this || (m_flags & WindowFlags::WIN_ACTIVE));
-			DrawReliefBox(&rect, Color::C_LIGHT_GREY, false);
+			bool active = (WINMGR().GetActive() == this || (m_flags & WIN_ACTIVE));
+
+			if (m_flags & WIN_DIALOG)
+			{
+				DrawButton(&rect, Color::C_LIGHT_GREY, nullptr, true, 2);
+			}
+			else
+			{
+				DrawReliefBox(&rect, Color::C_LIGHT_GREY, false);
+			}
+
 			DrawTitleBar(rect, active);
 			DrawTitle(rect, active);
 
@@ -495,7 +509,7 @@ namespace CoreUI
 					clientRect.h -= toolbarHeight;
 				}
 
-				if (!m_backgroundColor.IsTransparent())
+				if (!m_backgroundColor.IsTransparent() && !(m_flags & WIN_DIALOG))
 				{
 					DrawFilledRect(&clientRect, m_backgroundColor);
 				}
