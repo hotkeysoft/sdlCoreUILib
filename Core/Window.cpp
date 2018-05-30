@@ -40,7 +40,7 @@ namespace CoreUI
 
 		if (m_flags & WIN_DIALOG)
 		{
-			m_borderWidth = 0;
+			m_borderWidth = 2;
 		}
 
 		m_scrollBars = ScrollBars::Create(renderer, this);
@@ -181,12 +181,12 @@ namespace CoreUI
 		}
 		else
 		{
-			rect.x += m_borderWidth + 1;
-			rect.y += m_borderWidth + (m_buttonSize + 2) + 1;
+			rect.x += m_borderWidth;
+			rect.y += m_borderWidth + (m_buttonSize + 2);
 		}
 
-		rect.w -= (2 * (m_borderWidth + 1));
-		rect.h -= (2 * (m_borderWidth + 1)) + (m_buttonSize + 2);
+		rect.w -= (2 * m_borderWidth);
+		rect.h -= (2 * m_borderWidth) + (m_buttonSize + 2);
 
 		if (scrolled)
 		{
@@ -207,12 +207,12 @@ namespace CoreUI
 		}
 		else
 		{
-			rect.x += m_borderWidth + 1;
-			rect.y += m_borderWidth + (m_buttonSize + 2) + 1;
+			rect.x += m_borderWidth;
+			rect.y += m_borderWidth + (m_buttonSize + 2);
 		}
 
-		rect.w -= (2 * (m_borderWidth + 1));
-		rect.h -= (2 * (m_borderWidth + 1)) + (m_buttonSize + 2);
+		rect.w -= (2 * m_borderWidth);
+		rect.h -= (2 * m_borderWidth) + (m_buttonSize + 2);
 
 		if (m_menu)
 		{
@@ -248,17 +248,17 @@ namespace CoreUI
 		int sysButtonW = (m_flags & WindowFlags::WIN_SYSMENU) ? m_buttonSize + 2 : 0;
 		int minMaxButtonW = (m_flags & WindowFlags::WIN_MINMAX) ? (m_buttonSize + 2) * 2 : 0;		
 
-		rect.x += sysButtonW + m_borderWidth + 1;
-		rect.y += m_borderWidth + 1;
-		rect.w -= (2 * (m_borderWidth + 1)) + sysButtonW + minMaxButtonW;
+		rect.x += sysButtonW + m_borderWidth;
+		rect.y += m_borderWidth;
+		rect.w -= (2 * m_borderWidth) + sysButtonW + minMaxButtonW;
 		rect.h = m_buttonSize + 2;
 		return rect;
 	}
 
 	Rect Window::GetSystemMenuButtonRect(Rect rect) const
 	{
-		rect.x += m_borderWidth + 1;
-		rect.y += m_borderWidth + 1;
+		rect.x += m_borderWidth;
+		rect.y += m_borderWidth;
 		rect.w = m_buttonSize + 2;
 		rect.h = m_buttonSize + 2;
 
@@ -267,8 +267,8 @@ namespace CoreUI
 
 	Rect Window::GetMinimizeButtonRect(Rect rect) const
 	{
-		rect.x += rect.w - (m_borderWidth + (m_buttonSize + 2) * 2 + 1);
-		rect.y += m_borderWidth + 1;
+		rect.x += rect.w - (m_borderWidth + (m_buttonSize + 2) * 2);
+		rect.y += m_borderWidth;
 
 		rect.w = m_buttonSize + 2;
 		rect.h = m_buttonSize + 2;
@@ -278,8 +278,8 @@ namespace CoreUI
 
 	Rect Window::GetMaximizeButtonRect(Rect rect) const
 	{
-		rect.x += rect.w - (m_borderWidth + (m_buttonSize + 2) + 1);
-		rect.y += m_borderWidth + 1;
+		rect.x += rect.w - (m_borderWidth + (m_buttonSize + 2));
+		rect.y += m_borderWidth;
 
 		rect.w = m_buttonSize + 2;
 		rect.h = m_buttonSize + 2;
@@ -466,7 +466,8 @@ namespace CoreUI
 
 			if (m_flags & WIN_DIALOG)
 			{
-				DrawButton(&rect, Color::C_LIGHT_GREY, nullptr, true, 2);
+				DrawButton(&rect, Color::C_LIGHT_GREY, nullptr, true, m_borderWidth);
+				DrawRect(&rect.Deflate(m_borderWidth), Color::C_DARK_GREY);
 			}
 			else
 			{

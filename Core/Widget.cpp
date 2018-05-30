@@ -128,10 +128,11 @@ namespace CoreUI
 
 		if (m_borderWidth > 1)
 		{
-			Rect frame(pos->x + m_borderWidth,
-				pos->y + m_borderWidth,
-				pos->w - (2 * m_borderWidth),
-				pos->h - (2 * m_borderWidth));
+			int offset = m_borderWidth - 1;
+			Rect frame(pos->x + offset,
+				pos->y + offset,
+				pos->w - (2 * offset),
+				pos->h - (2 * offset));
 			Draw3dFrame(&frame, raised);
 		}
 	}
