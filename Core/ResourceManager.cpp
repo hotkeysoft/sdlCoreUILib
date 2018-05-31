@@ -3,9 +3,9 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "ResourceManager.h"
-#include "Widgets\Image.h"
-#include "Widgets\ImageMap.h"
-#include "Util\WinResource.h"
+#include "Widgets/Image.h"
+#include "Widgets/ImageMap.h"
+#include "Util/PlatformResource.h"
 #include "ResourceMap.h"
 
 namespace CoreUI
@@ -90,10 +90,10 @@ namespace CoreUI
 			throw std::invalid_argument("font id already loaded: " + std::string(res.id));
 		}
 
-		WinUtil::WinResource::DllResource resource = WinUtil::WinResource::LoadResource(res.winResId, res.winResType);
+		PlatformUtil::PlatformResource::LibResource resource = PlatformUtil::PlatformResource::LoadResource(res.winResId, res.winResType);
 		if (!resource.IsLoaded())
 		{
-			std::cerr << "Window resource not found: " << res.winResId << " while loading font " << res.id << std::endl;
+			std::cerr << "Platform resource not found: " << res.winResId << " while loading font " << res.id << std::endl;
 			return nullptr;
 		}
 		

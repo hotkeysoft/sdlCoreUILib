@@ -6,6 +6,16 @@
 #include <memory>
 #include <iostream>
 
+#ifdef COREUI_EXPORTS 
+/*Enabled as "export" while compiling the dll project*/
+#define DllExport __declspec(dllexport)  
+#elif defined _WINDOWS
+/*Enabled as "import" in the Client side for using already created dll file*/
+#define DllExport __declspec(dllimport)  
+#else 
+#define DllExport
+#endif
+
 namespace CoreUI
 {
 	using CreationFlags = uint32_t;

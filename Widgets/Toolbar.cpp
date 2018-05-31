@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <SDL.h>
-#include "Core\WindowManager.h"
-#include "Util\ClipRect.h"
+#include "Core/WindowManager.h"
+#include "Util/ClipRect.h"
 #include "Toolbar.h"
 #include "Image.h"
 #include "ToolbarItem.h"

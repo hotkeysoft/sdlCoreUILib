@@ -1,15 +1,15 @@
 #include "stdafx.h"
-#include "WinResource.h"
+#include "PlatformResource.h"
 #include <Windows.h>
 #include "resource.h"
 
-namespace WinUtil
+namespace PlatformUtil
 {
 	HMODULE g_hModDll;
 
-	WinResource::DllResource WinResource::LoadResource(int id, const char * resourceType)
+	PlatformResource::LibResource PlatformResource::LoadResource(int id, const char * resourceType)
 	{
-		DllResource ret;
+		LibResource ret;
 
 		HRSRC hRscr = ::FindResource(g_hModDll, MAKEINTRESOURCE(id), resourceType);
 		if (hRscr) 
@@ -31,7 +31,7 @@ BOOL WINAPI DllMain(
 	DWORD fdwReason,     // reason for calling function
 	LPVOID lpReserved)  // reserved
 {
-	WinUtil::g_hModDll = hinstDLL;
+	PlatformUtil::g_hModDll = hinstDLL;
 	// Perform actions based on the reason for calling.
 
 	switch (fdwReason)

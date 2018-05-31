@@ -1,18 +1,10 @@
 #pragma once
 #include "Common.h"
-#include "Core\Rect.h"
-#include "Core\Widget.h"
-#include "Core\WindowManager.h"
+#include "Core/Rect.h"
+#include "Core/Widget.h"
+#include "Core/WindowManager.h"
 #include <string>
 #include <list>
-
-#ifdef  COREUI_EXPORTS 
-/*Enabled as "export" while compiling the dll project*/
-#define DllExport __declspec(dllexport)  
-#else
-/*Enabled as "import" in the Client side for using already created dll file*/
-#define DllExport __declspec(dllimport)  
-#endif
 
 namespace CoreUI
 {
@@ -106,7 +98,7 @@ namespace CoreUI
 		bool NodeHasPreviousSibling(TreeNodeRef node);
 	
 		void SelectNode(TreeNodeRef node);
-		TreeNodeRef GetSelectedNode() const;
+		TreeNodeRef GetSelectedNode();
 
 		void MoveSelectionRel(int16_t deltaY);
 		void MoveSelectionPage(int16_t deltaY);
@@ -123,8 +115,8 @@ namespace CoreUI
 		void DrawBackground(const CoreUI::RectRef &rect);
 		void DrawTree(const CoreUI::RectRef &rect);
 		void DrawNode(const CoreUI::RectRef &rect, int line, TreeNodeRef node);
-		TreeNodeList::const_iterator FindNode(TreeNodeRef) const;
-		TreeNodeList::const_iterator FindSelectedNode() const;
+		TreeNodeList::iterator FindNode(TreeNodeRef);
+		TreeNodeList::iterator FindSelectedNode();
 		TreeNodeRef AddRootNode(const char * label, ImageRef opened, ImageRef closed);
 		TreeNodeRef NodeAt(PointRef pt);
 

@@ -1,20 +1,20 @@
 #include "stdafx.h"
 #include "SDL.h"
-#include "Core\Point.h"
-#include "Core\Rect.h"
-#include "Core\Window.h"
-#include "Core\ResourceManager.h"
+#include "Core/Point.h"
+#include "Core/Rect.h"
+#include "Core/Window.h"
+#include "Core/ResourceManager.h"
 #include "Image.h"
 #include "Label.h"
 #include "Tree.h"
-#include "Util\ClipRect.h"
+#include "Util/ClipRect.h"
 #include <algorithm>
 #include <cassert>
 
 namespace CoreUI
 {
 	TreeNode::TreeNode(RendererRef renderer, const char* text, ImageRef opened, ImageRef closed, TreeNodeRef parent, TreeRef tree) :
-		m_renderer(renderer), m_text(text), m_openedImage(opened), m_closedImage(closed), m_parent(parent), m_tree(tree), m_depth(0), m_opened(true)
+		m_renderer(renderer), m_text(text), m_openedImage(opened), m_closedImage(closed), m_parent(parent), m_tree(tree), m_depth(0), m_opened(true), m_selected(false)
 	{
 		TreeNodeRef curr = parent;
 		while (curr) 
@@ -26,7 +26,6 @@ namespace CoreUI
 
 	bool CoreUI::TreeNode::IsVisible() const
 	{
-		bool visible = true;
 		TreeNodeRef parent = m_parent;
 		while (parent)
 		{
@@ -41,8 +40,6 @@ namespace CoreUI
 	{
 		if (!m_label && !m_text.empty())
 		{
-			SDL_Surface* surface = TTF_RenderText_Blended(m_tree->GetFont(), m_text.c_str(), m_tree->GetForegroundColor());
-
 			m_label = Label::CreateAutoSize("l", m_renderer, m_text.c_str());
 			m_label->SetParent(m_tree);
 			m_label->SetPadding(Dimension(5, 0));
@@ -445,7 +442,7 @@ namespace CoreUI
 		return node;
 	}
 
-	TreeNodeList::const_iterator CoreUI::Tree::FindNode(TreeNodeRef toFind) const
+	TreeNodeList::iterator CoreUI::Tree::FindNode(TreeNodeRef toFind)
 	{
 		return std::find_if(m_nodes.begin(), m_nodes.end(), [toFind](TreeNodeRef node) {return toFind == node; });
 	}
@@ -510,12 +507,12 @@ namespace CoreUI
 		PostEvent(EVENT_TREE_SELECT, node);
 	}
 
-	TreeNodeList::const_iterator Tree::FindSelectedNode() const
+	TreeNodeList::iterator Tree::FindSelectedNode()
 	{
 		return std::find_if(m_nodes.begin(), m_nodes.end(), [](TreeNodeRef node) { return node->IsSelected(); });
 	}
 
-	TreeNodeRef Tree::GetSelectedNode() const
+	TreeNodeRef Tree::GetSelectedNode()
 	{
 		auto it = FindSelectedNode();
 		if (it != m_nodes.end())
@@ -545,7 +542,7 @@ namespace CoreUI
 		}
 		else if (deltaY > 0 && it != m_nodes.end())
 		{
-			TreeNodeList::const_iterator lastVisible = m_nodes.end();
+			TreeNodeList::iterator lastVisible = m_nodes.end();
 			while (deltaY > 0)
 			{
 				if (++it == m_nodes.end())

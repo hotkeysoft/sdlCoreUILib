@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Point.h"
-#include "SDL_Rect.h"
+#include "SDL_rect.h"
 #include <sstream>
 
 namespace CoreUI

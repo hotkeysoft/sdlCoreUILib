@@ -3,7 +3,7 @@
 #include <SDL_image.h>
 #include "Image.h"
 #include "ResourceMap.h"
-#include "Util\WinResource.h"
+#include "Util/PlatformResource.h"
 
 namespace CoreUI
 {
@@ -59,10 +59,10 @@ namespace CoreUI
 
 	bool Image::LoadFromResource(ResourceMap::ResourceInfo & res)
 	{
-		WinUtil::WinResource::DllResource resource = WinUtil::WinResource::LoadResource(res.winResId, res.winResType);
+		PlatformUtil::PlatformResource::LibResource resource = PlatformUtil::PlatformResource::LoadResource(res.winResId, res.winResType);
 		if (!resource.IsLoaded())
 		{
-			std::cerr << "Window resource not found: " << res.winResId << " while loading font " << res.id << std::endl;
+			std::cerr << "Platform resource not found: " << res.winResId << " while loading font " << res.id << std::endl;
 			return false;
 		}
 

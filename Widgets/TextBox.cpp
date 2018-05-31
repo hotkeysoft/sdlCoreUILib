@@ -1,15 +1,20 @@
 #include "stdafx.h"
 #include "SDL.h"
-#include "Core\Point.h"
-#include "Core\Rect.h"
-#include "Core\Window.h"
-#include "Core\ResourceManager.h"
-#include "Util\ClipRect.h"
+#include "Core/Point.h"
+#include "Core/Rect.h"
+#include "Core/Window.h"
+#include "Core/ResourceManager.h"
+#include "Util/ClipRect.h"
 #include "TextBox.h"
 #include "Image.h"
 #include <algorithm>
 #include <sstream>
 #include <cassert>
+
+#ifndef INT_MAX
+#define INT_MAX       2147483647    // maximum (signed) int value
+#define INT_MIN     (-2147483647 - 1) // minimum (signed) int value
+#endif
 
 namespace CoreUI
 {
@@ -201,7 +206,7 @@ namespace CoreUI
 	void TextBox::SplitLines()
 	{
 		std::stringstream ss(m_text);
-		int currLine = 0;
+		size_t currLine = 0;
 		while (ss.good())
 		{
 			std::string line;
@@ -488,7 +493,7 @@ namespace CoreUI
 		Point rel(pt->x + m_xOffset - client.x, pt->y - client.y);
 
 		cursorPos.y = (rel.y / m_lineHeight);
-		if (cursorPos.y > m_lines.size() - 1)
+		if (cursorPos.y > (int)(m_lines.size() - 1))
 		{
 			return Point(0, INT_MAX);
 		}
@@ -552,11 +557,12 @@ namespace CoreUI
 	void TextBox::Delete()
 	{
 		TextLine &currLine = m_lines[m_currentPos.y];
-		if (m_currentPos.y == m_lines.size() - 1 && m_currentPos.x == currLine.text.size())
+		if (m_currentPos.y == (int)(m_lines.size() - 1) && 
+			m_currentPos.x == (int)currLine.text.size())
 			return;
 
 		// Wrap line
-		if (m_currentPos.x == currLine.text.size())
+		if (m_currentPos.x == (int)currLine.text.size())
 		{
 			TextLine &nextLine = m_lines[m_currentPos.y + 1];
 			TextLine &currLine = m_lines[m_currentPos.y];
@@ -609,7 +615,7 @@ namespace CoreUI
 
 		if (e->type == timerEventID)
 		{
-			if (e->user.code == m_blinkTimerID && IsFocused())
+			if ((Uint32)e->user.code == m_blinkTimerID && IsFocused())
 			{
 				m_blink = !m_blink;
 			}

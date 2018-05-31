@@ -3,10 +3,10 @@
 #include "Point.h"
 #include "Rect.h"
 #include "Window.h"
-#include "Util\ClipRect.h"
-#include "Widgets\Image.h"
-#include "Widgets\Menu.h"
-#include "Widgets\Toolbar.h"
+#include "Util/ClipRect.h"
+#include "Widgets/Image.h"
+#include "Widgets/Menu.h"
+#include "Widgets/Toolbar.h"
 #include "ResourceManager.h"
 #include <algorithm>
 
@@ -609,6 +609,7 @@ namespace CoreUI
 		case HIT_HSCROLL_RIGHT: m_scrollBars->ScrollRel(&Point({ hScroll, 0 })); break;
 		case HIT_VSCROLL_UP: m_scrollBars->ScrollRel(&Point({ 0, -vScroll })); break;
 		case HIT_VSCROLL_DOWN: m_scrollBars->ScrollRel(&Point({ 0, vScroll })); break;
+		default: break;
 		}
 	}
 
@@ -714,7 +715,6 @@ namespace CoreUI
 
 	bool Window::MoveRect(RectRef rect)
 	{
-		bool clip = false;
 		if (m_flags & WindowFlags::WIN_CANRESIZE &&
 			!(m_showState & WindowState::WS_MAXIMIZED))
 		{
@@ -875,6 +875,7 @@ namespace CoreUI
 						capture = true;
 					}
 					break;
+				default: break;
 				}
 
 				if (hit.zone & (HIT_BORDER_ANY | HIT_CORNER_ANY))
@@ -904,6 +905,8 @@ namespace CoreUI
 					{
 						ButtonPushed(capture.Target);
 					}
+					break;
+				default: break;
 				}
 				WINMGR().ReleaseCapture();
 				return true;

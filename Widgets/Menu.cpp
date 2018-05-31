@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include <SDL.h>
-#include "Util\ClipRect.h"
+#include "Util/ClipRect.h"
 #include "Menu.h"
 #include "Label.h"
 #include "MenuItem.h"

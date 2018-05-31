@@ -93,7 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COREUI_EXPORTS;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COREUI_EXPORTS;_WINDOWS;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
@@ -114,6 +114,7 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>COREUI_EXPORTS;_WINDOWS;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <PostBuildEvent>
       <Message>Copying SDL dlls to output dir</Message>
@@ -131,6 +132,7 @@ xcopy /d /Y "$(SDLTTFLib32)\*.dll" "$(OutDir)"</Command>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>COREUI_EXPORTS;_WINDOWS;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -153,7 +155,7 @@ xcopy /d /Y "$(SDLTTFLib32)\*.dll" "$(OutDir)"</Command>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COREUI_EXPORTS;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COREUI_EXPORTS;_WINDOWS;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
@@ -213,8 +215,8 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="ResourceMap.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Util\ClipRect.h" />
+    <ClInclude Include="Util\PlatformResource.h" />
     <ClInclude Include="Util\RenderTarget.h" />
-    <ClInclude Include="Util\WinResource.h" />
     <ClInclude Include="Widgets\Button.h" />
     <ClInclude Include="Widgets\Image.h" />
     <ClInclude Include="Widgets\ImageMap.h" />

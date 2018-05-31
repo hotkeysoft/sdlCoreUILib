@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "SDL.h"
-#include "Core\Point.h"
-#include "Core\Rect.h"
-#include "Core\Window.h"
-#include "Core\ResourceManager.h"
+#include "Core/Point.h"
+#include "Core/Rect.h"
+#include "Core/Window.h"
+#include "Core/ResourceManager.h"
 #include "Image.h"
 #include "Menu.h"
 #include "ScrollBars.h"
 #include <algorithm>
+#include <memory>
 
 namespace CoreUI
 {
@@ -31,7 +32,7 @@ namespace CoreUI
 
 	ScrollBarsPtr ScrollBars::Create(RendererRef renderer, WindowRef parent)
 	{
-		return std::make_unique<shared_enabler>(renderer, parent);
+		return ScrollBarsPtr(new ScrollBars(renderer, parent));
 	}
 
 	void ScrollBars::DrawHScrollBar(RectRef pos)
@@ -296,6 +297,7 @@ namespace CoreUI
 				case HIT_TITLEBAR:
 					capture = true;
 					break;
+				default: break;
 				}
 
 				if (capture)
@@ -323,6 +325,8 @@ namespace CoreUI
 					{
 						m_parent->ButtonPushed(capture.Target);
 					}
+					break;
+				default: break;
 				}
 				WINMGR().ReleaseCapture();
 				return true;
@@ -336,7 +340,6 @@ namespace CoreUI
 				Point newPos = pt;
 				newPos.x += capture.Delta.x;
 				newPos.y += capture.Delta.y;
-				Point delta = { (capture.Origin.x - newPos.x) , (capture.Origin.y - newPos.y) };
 
 				bool handled = true;
 				switch ((HitZone)capture.Target)

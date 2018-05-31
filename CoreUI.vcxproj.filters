@@ -161,14 +161,14 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Util\WinResource.h">
-      <Filter>Util</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="ResourceMap.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\PlatformResource.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

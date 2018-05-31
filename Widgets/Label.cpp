@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "SDL.h"
-#include "Core\Point.h"
-#include "Core\Rect.h"
-#include "Core\ResourceManager.h"
-#include "Core\Window.h"
-#include "Util\ClipRect.h"
-#include "Util\RenderTarget.h"
+#include "Core/Point.h"
+#include "Core/Rect.h"
+#include "Core/ResourceManager.h"
+#include "Core/Window.h"
+#include "Util/ClipRect.h"
+#include "Util/RenderTarget.h"
 #include "Image.h"
 #include "Label.h"
 #include <algorithm>
@@ -132,7 +132,7 @@ namespace CoreUI
 
 	void Label::Draw(const RectRef rect, bool noClip)
 	{
-		Rect frameRect = DrawFrame(rect);
+		DrawFrame(rect);
 
 		Rect drawFrame = rect->Deflate(GetShrinkFactor());
 
@@ -224,7 +224,7 @@ namespace CoreUI
 		m_labelRect.x = 0;
 		m_labelRect.y = 0;
 		
-		if ((m_flags & LCF_MENUITEM) && (underlinePos != -1))
+		if ((m_flags & LCF_MENUITEM) && (underlinePos != std::string::npos))
 		{
 			DrawUnderline(toRender, underlinePos);
 		}
@@ -290,7 +290,7 @@ namespace CoreUI
 		std::string ret = m_text;
 		underlinePos = ret.find_first_of("&");
 
-		if (underlinePos != -1)
+		if (underlinePos != std::string::npos)
 		{
 			ret.erase(std::remove(ret.begin(), ret.end(), '&'), ret.end());
 		}

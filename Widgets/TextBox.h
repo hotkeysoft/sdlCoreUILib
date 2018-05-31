@@ -1,18 +1,10 @@
 #pragma once
 #include "Common.h"
-#include "Core\Widget.h"
-#include "Core\Rect.h"
-#include "Core\WindowManager.h"
+#include "Core/Widget.h"
+#include "Core/Rect.h"
+#include "Core/WindowManager.h"
 #include <string>
 #include <vector>
-
-#ifdef  COREUI_EXPORTS 
-/*Enabled as "export" while compiling the dll project*/
-#define DllExport __declspec(dllexport)  
-#else
-/*Enabled as "import" in the Client side for using already created dll file*/
-#define DllExport __declspec(dllimport)  
-#endif
 
 namespace CoreUI
 {

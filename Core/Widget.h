@@ -7,14 +7,6 @@
 #include <string>
 #include <ostream>
 
-#ifdef  COREUI_EXPORTS 
-/*Enabled as "export" while compiling the dll project*/
-#define DllExport __declspec(dllexport)  
-#else
-/*Enabled as "import" in the Client side for using already created dll file*/
-#define DllExport __declspec(dllimport)  
-#endif
-
 #define STRINGIZE( a ) #a
 #define DECLARE_EVENT_CLASS_NAME(className)			\
     static const char* EventClassName() { return STRINGIZE(className); }	\

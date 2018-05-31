@@ -75,7 +75,7 @@ namespace CoreUI
 
 	ImageRef ImageMap::GetTile(int index)
 	{
-		if (index < 0 || index > m_tiles.size() - 1)
+		if (index < 0 || (size_t)index > m_tiles.size() - 1)
 		{
 			throw std::out_of_range("invalid tile index");
 		}

@@ -5,10 +5,25 @@
 #include "Window.h"
 #include <algorithm>
 #include <iostream>
-#include "Basetsd.h"
+
+#ifdef _WINDOWS
+#include "basetsd.h"
+#endif
 
 namespace CoreUI
 {
+#ifndef _WINDOWS
+	__inline void * LongToPtr(const long l)
+	{
+		return (void*)l;
+	}
+
+	__inline unsigned long PtrToUlong(const void *p)
+	{
+		return((unsigned long)p);
+	}
+#endif
+
 	WindowManager & WindowManager::Get()
 	{
 		static WindowManager manager;
@@ -161,7 +176,7 @@ namespace CoreUI
 	Uint32 timerCallbackFunc(Uint32 interval, void *param)
 	{
 		const static Uint32 timerEventID = WINMGR().GetEventType("timer");
-		if (timerEventID == -1)
+		if (timerEventID == (Uint32)-1)
 			return -1;
 
 		SDL_Event timerEvent;

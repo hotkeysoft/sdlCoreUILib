@@ -2,14 +2,6 @@
 #include "Common.h"
 #include <string>
 
-#ifdef  COREUI_EXPORTS 
-/*Enabled as "export" while compiling the dll project*/
-#define DllExport __declspec(dllexport)  
-#else
-/*Enabled as "import" in the Client side for using already created dll file*/
-#define DllExport __declspec(dllimport)  
-#endif
-
 namespace CoreUI
 {
 	class DllExport Color : public SDL_Color

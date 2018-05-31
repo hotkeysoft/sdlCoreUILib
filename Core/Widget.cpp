@@ -4,7 +4,7 @@
 #include "Rect.h"
 #include "Widget.h"
 #include "WindowManager.h"
-#include "Widgets\Image.h"
+#include "Widgets/Image.h"
 
 namespace CoreUI
 {
@@ -76,7 +76,7 @@ namespace CoreUI
 			m_font = RES().FindFont("coreUI.default");
 			if (m_font == nullptr)
 			{
-				throw std::exception("Unable to load default font");
+				throw std::runtime_error("Unable to load default font");
 			}
 		}
 		else
@@ -208,7 +208,7 @@ namespace CoreUI
 
 	Uint32 Widget::GetEventClassId()
 	{
-		if (m_eventClassId == -1)
+		if (m_eventClassId == (Uint32)-1)
 		{
 			m_eventClassId = WINMGR().GetEventType(GetClassName());
 		}

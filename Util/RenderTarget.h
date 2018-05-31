@@ -18,6 +18,10 @@ namespace CoreUI
 			{
 				m_target = texture;
 			}
+			else
+			{
+				m_target = nullptr;
+			}
 		}
 
 		explicit operator bool() const { return m_target != nullptr; }

@@ -1,6 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Core\Rect.h"
+#include "Core/Rect.h"
 
 namespace CoreUI
 {
