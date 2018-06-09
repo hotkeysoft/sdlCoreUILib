@@ -691,10 +691,17 @@ namespace CoreUI
 		}
 		case SDL_MOUSEBUTTONDOWN:
 		{
-			Point cursor = CursorAt(&pt);
-			SetActive();
-			SetFocus(this);
-			return cursor.x >= 0;
+			if (hit)
+			{
+				Point cursor = CursorAt(&pt);
+				SetActive();
+				SetFocus(this);
+				return cursor.x >= 0;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		default:
 			return false;

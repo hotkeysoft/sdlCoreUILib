@@ -38,11 +38,6 @@ namespace CoreUI
 			throw std::invalid_argument("WIN_MINMAX flag needs parent window");
 		}
 
-		if (m_flags & WIN_DIALOG)
-		{
-			m_borderWidth = 2;
-		}
-
 		m_scrollBars = ScrollBars::Create(renderer, this);
 
 		m_backgroundColor = Color::C_LIGHT_GREY;
@@ -466,8 +461,10 @@ namespace CoreUI
 
 			if (m_flags & WIN_DIALOG)
 			{
-				DrawButton(&rect, Color::C_LIGHT_GREY, nullptr, true, m_borderWidth);
-				DrawRect(&rect.Deflate(m_borderWidth), Color::C_DARK_GREY);
+				DrawFilledRect(&rect, Color::C_LIGHT_GREY);
+
+				Draw3dFrame(&rect, true, Color::C_DARK_GREY);			
+				Draw3dFrame(&rect.Deflate(1), true, Color::C_MED_GREY);			
 			}
 			else
 			{
