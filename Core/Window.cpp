@@ -41,6 +41,8 @@ namespace CoreUI
 		m_scrollBars = ScrollBars::Create(renderer, this);
 
 		m_backgroundColor = Color::C_LIGHT_GREY;
+
+		m_minSize = 120;
 	}
 
 	WindowPtr Window::Create(const char* id, RendererRef renderer, WindowRef parent, FontRef font, Rect rect, CreationFlags flags)
@@ -514,11 +516,31 @@ namespace CoreUI
 
 				m_scrollBars->Draw(&clientRect);
 				
+				DrawGrid();
+
 				DrawControls();
 			}
 		}
 	}
 	
+	void Window::DrawGrid()
+	{
+		int gridSize = m_grid.GetSize();
+		if (m_grid.IsVisible() && gridSize > 1)
+		{
+			SetDrawColor(Color::C_BLACK);
+			Rect clientRect = GetClientRect(false, true);
+			for (int x = clientRect.x; x < clientRect.x + clientRect.w; x += gridSize)
+			{
+				for (int y = clientRect.y; y < clientRect.y + clientRect.h; y += gridSize)
+				{
+					SDL_RenderDrawPoint(m_renderer, x, y);
+				}
+			}
+		}
+	}
+
+
 	void Window::DrawMenu()
 	{
 		if (m_menu)
@@ -612,27 +634,13 @@ namespace CoreUI
 
 	bool Window::MovePos(PointRef pos)
 	{
-		bool clip = false;
 		if ((m_flags & WindowFlags::WIN_CANMOVE) &&
 			!(m_showState & WindowState::WS_MAXIMIZED))
 		{
-			m_rect.x = pos->x;
-			m_rect.y = pos->y;
-
-			if (m_rect.x < 0)
-			{
-				clip = true;
-				m_rect.x = 0;
-			}
-
-			if (m_rect.y < 0)
-			{
-				clip = true;
-				m_rect.y = 0;
-			}
+			return Widget::MovePos(pos);
 		}
 
-		return !clip;
+		return false;
 	}
 
 	bool Window::MoveRel(PointRef rel)
@@ -641,48 +649,21 @@ namespace CoreUI
 		if ((m_flags & WindowFlags::WIN_CANMOVE) &&
 			!(m_showState & WindowState::WS_MAXIMIZED))
 		{
-			m_rect.x += rel->x;
-			m_rect.y += rel->y;
-
-			if (m_rect.x < 0)
-			{
-				clip = true;
-				m_rect.x = 0;
-			}
-
-			if (m_rect.y < 0)
-			{
-				clip = true;
-				m_rect.y = 0;
-			}
+			return Widget::MoveRel(rel);
 		}		
 
-		return !clip;
+		return false;
 	}
 
 	bool Window::ResizeRel(PointRef rel)
 	{
-		bool clip = false;
 		if (m_flags & WindowFlags::WIN_CANRESIZE &&
 			!(m_showState & WindowState::WS_MAXIMIZED))
 		{
-			m_rect.w += rel->x;
-			m_rect.h += rel->y;
-
-			if (m_rect.w < 100)
-			{
-				clip = true;
-				m_rect.w = 100;
-			}
-
-			if (m_rect.h < 100)
-			{
-				clip = true;
-				m_rect.h = 100;
-			}
+			return Widget::ResizeRel(rel);
 		}
 
-		return !clip;
+		return false;
 	}
 
 	bool Window::Resize(PointRef size)
@@ -691,23 +672,10 @@ namespace CoreUI
 		if (m_flags & WindowFlags::WIN_CANRESIZE &&
 			!(m_showState & WindowState::WS_MAXIMIZED))
 		{
-			m_rect.w = size->x;
-			m_rect.h = size->y;
-
-			if (m_rect.w < 100)
-			{
-				clip = true;
-				m_rect.w = 100;
-			}
-
-			if (m_rect.h < 100)
-			{
-				clip = true;
-				m_rect.h = 100;
-			}
+			return Widget::Resize(size);
 		}
 
-		return !clip;
+		return false;
 	}
 
 	bool Window::MoveRect(RectRef rect)
@@ -715,43 +683,9 @@ namespace CoreUI
 		if (m_flags & WindowFlags::WIN_CANRESIZE &&
 			!(m_showState & WindowState::WS_MAXIMIZED))
 		{
-			Point origin = m_rect.Origin();
-			m_rect.x = rect->x;
-			m_rect.y = rect->y;
-
-			if (m_rect.x < 0)
-			{
-				m_rect.x = 0;
-				m_rect.w = rect->w + rect->x;
-			}
-			else
-			{
-				m_rect.w = rect->w;
-			}
-
-			if (m_rect.y < 0)
-			{
-				m_rect.y = 0;
-				m_rect.h = rect->h + rect->y;
-			}
-			else
-			{
-				m_rect.h = rect->h;
-			}
-			
-			if (m_rect.w <= 120)
-			{
-				m_rect.w = 120;
-				m_rect.x = origin.x;
-			}
-
-			if (m_rect.h <= 120)
-			{
-				m_rect.h = 120;
-				m_rect.y = origin.y;
-			}
-
+			return Widget::MoveRect(rect);
 		}
+
 		return false;
 	}
 

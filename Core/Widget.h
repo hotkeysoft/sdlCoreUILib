@@ -103,6 +103,16 @@ namespace CoreUI
 		virtual Color GetSelectedBgColor() { return m_selectedBgColor; }
 		virtual void SetSelectedBgColor(Color color) { m_selectedBgColor = std::move(color); }
 
+		// Size & Position
+		virtual Dimension GetMinSize() { return m_minSize; }
+		virtual void SetMinSize(Dimension minSize) { m_minSize = minSize; }
+
+		virtual bool MoveRel(PointRef rel);
+		virtual bool MovePos(PointRef pos);
+		virtual bool MoveRect(RectRef rect);
+		virtual bool ResizeRel(PointRef rel);
+		virtual bool Resize(PointRef size);
+
 		// Parent
 		virtual bool HasParent() const { return m_parent != nullptr; }
 		virtual const WidgetRef GetParent() const { return m_parent; }
@@ -133,7 +143,7 @@ namespace CoreUI
 
 		void SetDrawColor(const CoreUI::Color & col);
 		void DrawFilledRect(const RectRef pos, const CoreUI::Color & col);
-		void DrawRect(const RectRef pos, const CoreUI::Color & col);
+		void DrawRect(const RectRef pos, const CoreUI::Color & col, int borderWidth = 1);
 		void DrawButton(const RectRef pos, const CoreUI::Color & col, ImageRef image, bool raised, int thickness = 1);
 		void Draw3dFrame(const RectRef pos, bool raised, const CoreUI::Color & col = Color::C_LIGHT_GREY);
 		void DrawReliefBox(const RectRef pos, const CoreUI::Color & col, bool raised);
@@ -166,6 +176,7 @@ namespace CoreUI
 
 		Dimension m_padding;
 		Dimension m_margin;
+		Dimension m_minSize;
 		uint8_t m_borderWidth;
 
 		static uint8_t constexpr m_buttonSize = 24;

@@ -369,8 +369,8 @@ namespace CoreUI
 				return 1;
 			}
 
-			if (mode.h < 720)
-				continue;
+//			if (mode.h < 720)
+//				continue;
 			m_screenResolutions.insert({ i, mode.w, mode.h });
 		}
 

@@ -30,6 +30,8 @@ namespace CoreUI
 
 		explicit operator bool() const { return w || h; }
 
+		std::string ToString() const;
+
 		uint8_t w;
 		uint8_t h;
 	};
@@ -70,6 +72,12 @@ namespace CoreUI
 	inline std::ostream & operator << (std::ostream & os, const Rect& rect)
 	{
 		os << rect.ToString();
+		return os;
+	}
+
+	inline std::ostream & operator << (std::ostream & os, const Dimension& dim)
+	{
+		os << dim.ToString();
 		return os;
 	}
 }

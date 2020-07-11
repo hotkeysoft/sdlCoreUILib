@@ -29,6 +29,7 @@ namespace CoreUI
 		m_selectedFgColor(Color::C_WHITE),
 		m_padding(0),
 		m_margin(0),
+		m_minSize(1),
 		m_borderWidth(4),
 		m_focused(false),
 		m_flags(flags),
@@ -103,11 +104,21 @@ namespace CoreUI
 		SDL_RenderDrawLines(m_renderer, points + 2, 3);
 	}
 
-	void Widget::DrawRect(const RectRef pos, const CoreUI::Color & col)
+	void Widget::DrawRect(const RectRef pos, const CoreUI::Color & col, int borderWidth)
 	{
 		SetDrawColor(col);
 
 		SDL_RenderDrawRect(m_renderer, pos);
+
+		if (borderWidth > 1)
+		{
+			Rect innerRect = *pos;
+			for (int i = 1; i < borderWidth; ++i)
+			{
+				innerRect = innerRect.Deflate(1);
+				SDL_RenderDrawRect(m_renderer, &innerRect);
+			}
+		}
 	}
 
 	void Widget::DrawFilledRect(const RectRef pos, const CoreUI::Color & col)
@@ -204,6 +215,136 @@ namespace CoreUI
 	Rect Widget::GetClientRect(bool relative, bool scrolled) const
 	{
 		return GetRect(relative, scrolled);
+	}
+
+	bool Widget::MovePos(PointRef pos)
+	{
+		bool clip = false;
+
+		m_rect.x = pos->x;
+		m_rect.y = pos->y;
+
+		if (m_rect.x < 0)
+		{
+			clip = true;
+			m_rect.x = 0;
+		}
+
+		if (m_rect.y < 0)
+		{
+			clip = true;
+			m_rect.y = 0;
+		}
+
+		return !clip;
+	}
+
+	bool Widget::MoveRel(PointRef rel)
+	{
+		bool clip = false;
+
+		m_rect.x += rel->x;
+		m_rect.y += rel->y;
+
+		if (m_rect.x < 0)
+		{
+			clip = true;
+			m_rect.x = 0;
+		}
+
+		if (m_rect.y < 0)
+		{
+			clip = true;
+			m_rect.y = 0;
+		}
+
+		return !clip;
+	}
+
+	bool Widget::ResizeRel(PointRef rel)
+	{
+		bool clip = false;
+
+		m_rect.w += rel->x;
+		m_rect.h += rel->y;
+
+		if (m_rect.w < m_minSize.w)
+		{
+			clip = true;
+			m_rect.w = m_minSize.w;
+		}
+
+		if (m_rect.h < m_minSize.h)
+		{
+			clip = true;
+			m_rect.h = m_minSize.h;
+		}
+
+		return !clip;
+	}
+
+	bool Widget::Resize(PointRef size)
+	{
+		bool clip = false;
+
+		m_rect.w = size->x;
+		m_rect.h = size->y;
+
+		if (m_rect.w < m_minSize.w)
+		{
+			clip = true;
+			m_rect.w = m_minSize.w;
+		}
+
+		if (m_rect.h < m_minSize.h)
+		{
+			clip = true;
+			m_rect.h = m_minSize.h;
+		}
+
+		return !clip;
+	}
+
+	bool Widget::MoveRect(RectRef rect)
+	{
+		{
+			Point origin = m_rect.Origin();
+			m_rect.x = rect->x;
+			m_rect.y = rect->y;
+
+			if (m_rect.x < 0)
+			{
+				m_rect.x = 0;
+				m_rect.w = rect->w + rect->x;
+			}
+			else
+			{
+				m_rect.w = rect->w;
+			}
+
+			if (m_rect.y < 0)
+			{
+				m_rect.y = 0;
+				m_rect.h = rect->h + rect->y;
+			}
+			else
+			{
+				m_rect.h = rect->h;
+			}
+
+			if (m_rect.w <= m_minSize.w)
+			{
+				m_rect.w = m_minSize.w;
+				m_rect.x = origin.x;
+			}
+
+			if (m_rect.h <= m_minSize.h)
+			{
+				m_rect.h = m_minSize.h;
+				m_rect.y = origin.y;
+			}
+		}
+		return false;
 	}
 
 	Uint32 Widget::GetEventClassId()

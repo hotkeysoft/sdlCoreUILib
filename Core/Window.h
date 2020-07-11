@@ -3,6 +3,7 @@
 #include "Widget.h"
 #include "Rect.h"
 #include "Color.h"
+#include "Grid.h"
 #include "WindowManager.h"
 #include "Widgets/ScrollBars.h"
 #include <string>
@@ -58,15 +59,19 @@ namespace CoreUI
 		void ToggleButtonState(HitZone button, bool pushed);
 		void ButtonPushed(HitZone button);
 
-		bool MoveRel(PointRef rel);
-		bool MovePos(PointRef pos);
-		bool MoveRect(RectRef rect);
-		bool ResizeRel(PointRef rel);
-		bool Resize(PointRef size);
+		// Size and Position
+		bool MoveRel(PointRef rel) override;
+		bool MovePos(PointRef pos) override;
+		bool MoveRect(RectRef rect) override;
+		bool ResizeRel(PointRef rel) override;
+		bool Resize(PointRef size) override;
 
 		void Maximize();
 		void Minimize();
 		void Restore();
+
+		// Grid
+		Grid& GetGrid() { return m_grid; }
 
 		bool HandleEvent(SDL_Event *) override;
 
@@ -99,6 +104,7 @@ namespace CoreUI
 		void DrawControls();
 		void DrawMenu();
 		void DrawToolbar();
+		void DrawGrid();
 		void RenderTitle();
 
 		Rect GetClipRect(WindowRef win);
@@ -121,6 +127,8 @@ namespace CoreUI
 
 		MenuPtr m_menu;
 		ToolbarPtr m_toolbar;
+
+		Grid m_grid;
 
 		struct shared_enabler;
 

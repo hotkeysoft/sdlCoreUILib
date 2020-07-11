@@ -50,4 +50,11 @@ namespace CoreUI
 		os << "RECT(xy[" << this->x << "," << this->y << "],wh[" << this->w << "," << this->h << "])";
 		return os.str();
 	}
+
+	std::string Dimension::ToString() const
+	{
+		std::ostringstream os;
+		os << "D(wh[" << this->w << "," << this->h << "])";
+		return os.str();
+	}
 }

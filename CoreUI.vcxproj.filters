@@ -93,6 +93,9 @@
     <ClCompile Include="ResourceMap.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Grid.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="Util\PlatformResource.h">
       <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Grid.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
