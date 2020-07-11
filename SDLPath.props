@@ -2,15 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <SDLInclude>D:\Projects\SDL2-2.0.8\include</SDLInclude>
-    <SDLLib32>D:\Projects\SDL2-2.0.8\lib\x86</SDLLib32>
-    <SDLLib64>D:\Projects\SDL2-2.0.8\lib\x64</SDLLib64>
-    <SDLImageInclude>D:\Projects\SDL2_image-2.0.3\include</SDLImageInclude>
-    <SDLImageLib32>D:\Projects\SDL2_image-2.0.3\lib\x86</SDLImageLib32>
-    <SDLImageLib64>D:\Projects\SDL2_image-2.0.3\lib\x64</SDLImageLib64>
-    <SDLTTFInclude>D:\Projects\SDL2_ttf-2.0.14\include</SDLTTFInclude>
-    <SDLTTFLib32>D:\Projects\SDL2_ttf-2.0.14\lib\x86</SDLTTFLib32>
-    <SDLTTFLib64>D:\Projects\SDL2_ttf-2.0.14\lib\x64</SDLTTFLib64>
+    <SDLInclude>P:\Projects\common-lib\SDL\SDL2-2.0.8\include</SDLInclude>
+    <SDLLib32>P:\Projects\common-lib\SDL\SDL2-2.0.8\lib\x86</SDLLib32>
+    <SDLLib64>P:\Projects\common-lib\SDL\SDL2-2.0.8\lib\x64</SDLLib64>
+    <SDLImageInclude>P:\Projects\common-lib\SDL\SDL2_image-2.0.3\include</SDLImageInclude>
+    <SDLImageLib32>P:\Projects\common-lib\SDL\SDL2_image-2.0.3\lib\x86</SDLImageLib32>
+    <SDLImageLib64>P:\Projects\common-lib\SDL\SDL2_image-2.0.3\lib\x64</SDLImageLib64>
+    <SDLTTFInclude>P:\Projects\common-lib\SDL\SDL2_ttf-2.0.14\include</SDLTTFInclude>
+    <SDLTTFLib32>P:\Projects\common-lib\SDL\SDL2_ttf-2.0.14\lib\x86</SDLTTFLib32>
+    <SDLTTFLib64>P:\Projects\common-lib\SDL\SDL2_ttf-2.0.14\lib\x64</SDLTTFLib64>
   </PropertyGroup>
   <PropertyGroup>
     <IncludePath>$(SDLInclude);$(SDLImageInclude);$(SDLTTFInclude);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
