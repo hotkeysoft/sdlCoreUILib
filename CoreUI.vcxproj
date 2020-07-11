@@ -244,6 +244,9 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <Font Include="Resources\Oxygen-Bold.ttf" />
     <Font Include="Resources\Oxygen-Regular.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="SDLPath.props" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

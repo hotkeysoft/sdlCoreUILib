@@ -204,4 +204,7 @@
       <Filter>Resource Files\Fonts</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="SDLPath.props" />
+  </ItemGroup>
 </Project>
