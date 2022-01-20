@@ -199,11 +199,6 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Widgets\Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DigiLib\DigiLib.vcxproj">
-      <Project>{8f24f56a-3819-4545-92c3-219b8f4e1c7a}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="Core\Color.h" />
     <ClInclude Include="Core\Grid.h" />
@@ -245,6 +240,7 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <Font Include="Resources\Oxygen-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="SDLPath.props" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

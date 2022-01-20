@@ -206,5 +206,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SDLPath.props" />
+    <None Include="README.md" />
   </ItemGroup>
 </Project>

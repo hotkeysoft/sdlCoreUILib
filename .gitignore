@@ -1,0 +1,4 @@
+*.bak
+.vs
+x64
+/packages
