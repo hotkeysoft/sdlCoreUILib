@@ -90,9 +90,9 @@ namespace CoreUI
 	};
 
 	enum WindowState : uint16_t {
-		WS_VISIBLE = 1,
-		WS_MAXIMIZED = 2,
-		WS_MINIMIZED = 4,
+		WST_VISIBLE = 1,
+		WST_MAXIMIZED = 2,
+		WST_MINIMIZED = 4,
 	};
 
 	class Widget;
@@ -183,7 +183,7 @@ namespace CoreUI
 
 	template <typename T>
 	T clip(const T& n, const T& lower, const T& upper) {
-		return std::max(lower, std::min(n, upper));
+		return (std::max)(lower, (std::min)(n, upper));
 	}
 }
 

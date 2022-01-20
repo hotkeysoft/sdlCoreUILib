@@ -9,6 +9,7 @@
 #include <vector>
 #include <functional>
 #include <set>
+#include <sstream>
 
 namespace CoreUI
 {

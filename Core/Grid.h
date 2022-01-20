@@ -12,7 +12,7 @@ namespace CoreUI
 		Grid() : m_size(1), m_show(false), m_snap(false) {}
 
 		int GetSize() { return m_size; }
-		void SetSize(int size) { m_size = std::max(1, size); }
+		void SetSize(int size) { m_size = (std::max)(1, size); }
 
 		bool IsVisible() { return m_show; }
 		void Show(bool show) { m_show = show; }

@@ -129,7 +129,7 @@ namespace CoreUI
 		bool showV = false;
 		for (auto & child : m_parent->GetChildWindows())
 		{
-			if (child->GetParent() != nullptr && !(child->GetShowState() & (WindowState::WS_MAXIMIZED | WindowState::WS_MINIMIZED)))
+			if (child->GetParent() != nullptr && !(child->GetShowState() & (WST_MAXIMIZED | WST_MINIMIZED)))
 			{
 				Rect childRect = child->GetRect(true, false);
 				CheckChildScrollStatus(child.get(), &childRect, showH, showV);

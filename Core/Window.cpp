@@ -22,7 +22,7 @@ namespace CoreUI
 
 	Window::Window(const char* id, RendererRef renderer, WindowRef parent, FontRef font, Rect rect, CreationFlags flags) :
 		Widget(id, renderer, parent, rect, nullptr, nullptr, font, flags),
-		m_showState(WindowState::WS_VISIBLE), m_pushedState(HIT_NOTHING)
+		m_showState(WST_VISIBLE), m_pushedState(HIT_NOTHING)
 	{
 		if (m_renderer == nullptr)
 		{
@@ -85,8 +85,8 @@ namespace CoreUI
 		static ImageRef maximizeButton = RES().FindImage("coreUI.widget24x24", 1);
 		static ImageRef restoreButton = RES().FindImage("coreUI.widget24x24", 2);
 
-		DrawButton(&GetMinimizeButtonRect(pos), col, (m_showState & WindowState::WS_MINIMIZED) ? restoreButton : minimizeButton, !(m_pushedState & HIT_MINBUTTON));
-		DrawButton(&GetMaximizeButtonRect(pos), col, (m_showState & WindowState::WS_MAXIMIZED) ? restoreButton : maximizeButton, !(m_pushedState & HIT_MAXBUTTON));
+		DrawButton(&GetMinimizeButtonRect(pos), col, (m_showState & WST_MINIMIZED) ? restoreButton : minimizeButton, !(m_pushedState & HIT_MINBUTTON));
+		DrawButton(&GetMaximizeButtonRect(pos), col, (m_showState & WST_MAXIMIZED) ? restoreButton : maximizeButton, !(m_pushedState & HIT_MAXBUTTON));
 	}
 
 	WindowManager::WindowList Window::GetChildWindows()
@@ -134,11 +134,11 @@ namespace CoreUI
 			rect = WINMGR().GetWindowSize();
 		}
 		
-		if (m_showState & WindowState::WS_MAXIMIZED)
+		if (m_showState & WST_MAXIMIZED)
 		{
 			rect = GetParent()->GetClientRect(true, false);
 		}
-		else if (m_showState & WindowState::WS_MINIMIZED)
+		else if (m_showState & WST_MINIMIZED)
 		{
 			int minimizedHeight = (m_buttonSize + 2) + (2 * m_borderWidth) + 2;
 			rect = GetParent()->GetClientRect(true, false);
@@ -328,7 +328,7 @@ namespace CoreUI
 
 	HitResult Window::HitTest(const PointRef pt)
 	{
-		if (!(m_showState & WindowState::WS_VISIBLE))
+		if (!(m_showState & WST_VISIBLE))
 		{
 			return HitZone::HIT_NOTHING;
 		}
@@ -401,7 +401,7 @@ namespace CoreUI
 		}
 
 		// Resize handles
-		if (m_showState & (WindowState::WS_MAXIMIZED | WindowState::WS_MINIMIZED) ||
+		if (m_showState & (WST_MAXIMIZED | WST_MINIMIZED) ||
 			!(m_flags & WindowFlags::WIN_CANRESIZE))
 		{
 			return HitResult(HitZone::HIT_NOTHING, this);
@@ -451,7 +451,7 @@ namespace CoreUI
 
 	void Window::Draw()
 	{
-		if (!(m_showState & WindowState::WS_VISIBLE))
+		if (!(m_showState & WST_VISIBLE))
 			return;
 
 		ClipRect clip(m_renderer, m_parent ? &GetClipRect(GetParentWnd()) : nullptr, m_parent);
@@ -485,7 +485,7 @@ namespace CoreUI
 				DrawMinMaxButtons(rect, Color::C_LIGHT_GREY);
 			}
 
-			if (!(m_showState & WS_MINIMIZED))
+			if (!(m_showState & WST_MINIMIZED))
 			{
 				Rect clientRect = GetRawClientRect(false, false);
 				if (m_menu)
@@ -635,7 +635,7 @@ namespace CoreUI
 	bool Window::MovePos(PointRef pos)
 	{
 		if ((m_flags & WindowFlags::WIN_CANMOVE) &&
-			!(m_showState & WindowState::WS_MAXIMIZED))
+			!(m_showState & WST_MAXIMIZED))
 		{
 			return Widget::MovePos(pos);
 		}
@@ -647,7 +647,7 @@ namespace CoreUI
 	{
 		bool clip = false;
 		if ((m_flags & WindowFlags::WIN_CANMOVE) &&
-			!(m_showState & WindowState::WS_MAXIMIZED))
+			!(m_showState & WST_MAXIMIZED))
 		{
 			return Widget::MoveRel(rel);
 		}		
@@ -658,7 +658,7 @@ namespace CoreUI
 	bool Window::ResizeRel(PointRef rel)
 	{
 		if (m_flags & WindowFlags::WIN_CANRESIZE &&
-			!(m_showState & WindowState::WS_MAXIMIZED))
+			!(m_showState & WST_MAXIMIZED))
 		{
 			return Widget::ResizeRel(rel);
 		}
@@ -670,7 +670,7 @@ namespace CoreUI
 	{
 		bool clip = false;
 		if (m_flags & WindowFlags::WIN_CANRESIZE &&
-			!(m_showState & WindowState::WS_MAXIMIZED))
+			!(m_showState & WST_MAXIMIZED))
 		{
 			return Widget::Resize(size);
 		}
@@ -681,7 +681,7 @@ namespace CoreUI
 	bool Window::MoveRect(RectRef rect)
 	{
 		if (m_flags & WindowFlags::WIN_CANRESIZE &&
-			!(m_showState & WindowState::WS_MAXIMIZED))
+			!(m_showState & WST_MAXIMIZED))
 		{
 			return Widget::MoveRect(rect);
 		}
@@ -696,15 +696,15 @@ namespace CoreUI
 			return;
 		}
 
-		if (m_showState & WindowState::WS_MINIMIZED)
+		if (m_showState & WST_MINIMIZED)
 		{
 			Restore();
 			GetParentWnd()->SetMinimizedChild(this, false);
 		}
 		else
 		{
-			m_showState = WindowState(m_showState | WindowState::WS_MINIMIZED);
-			m_showState = WindowState(m_showState & ~WindowState::WS_MAXIMIZED);
+			m_showState = WindowState(m_showState | WST_MINIMIZED);
+			m_showState = WindowState(m_showState & ~WST_MAXIMIZED);
 
 			GetParentWnd()->SetMinimizedChild(this, true);
 		}
@@ -717,15 +717,15 @@ namespace CoreUI
 			return;
 		}
 
-		if (m_showState & WindowState::WS_MAXIMIZED)
+		if (m_showState & WST_MAXIMIZED)
 		{
 			Restore();
 		}
 		else
 		{
 			m_scrollBars->ScrollTo(&Point({ 0,0 }));
-			m_showState = WindowState(m_showState | WindowState::WS_MAXIMIZED);
-			m_showState = WindowState(m_showState & ~WindowState::WS_MINIMIZED);
+			m_showState = WindowState(m_showState | WST_MAXIMIZED);
+			m_showState = WindowState(m_showState & ~WST_MINIMIZED);
 		}
 	}
 
@@ -736,7 +736,7 @@ namespace CoreUI
 			return;
 		}
 
-		m_showState = WindowState(m_showState & ~(WindowState::WS_MAXIMIZED | WindowState::WS_MINIMIZED));
+		m_showState = WindowState(m_showState & ~(WST_MAXIMIZED | WST_MINIMIZED));
 	}
 
 	int Window::GetMinimizedChildIndex(WindowRef child) const

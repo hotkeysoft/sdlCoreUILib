@@ -61,7 +61,7 @@ namespace CoreUI
 		}
 
 		// Active menu needs to be drawn on top of everything
-		if (m_activeWindow && !(m_activeWindow->GetShowState() & WS_MINIMIZED))
+		if (m_activeWindow && !(m_activeWindow->GetShowState() & WST_MINIMIZED))
 		{
 			m_activeWindow->DrawMenu();
 		}
