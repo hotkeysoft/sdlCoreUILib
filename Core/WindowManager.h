@@ -61,7 +61,7 @@ namespace CoreUI
 
 		static WindowManager & Get();
 
-		void Init(SDL_Window * window, RendererPtr & renderer);
+		void Init(SDL_Window * window, RendererRef renderer);
 		void Dispose();
 
 		void Draw();

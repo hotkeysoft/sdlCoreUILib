@@ -16,9 +16,9 @@ namespace CoreUI
 		return manager;
 	}
 
-	void ResourceManager::Init(RendererPtr & renderer)
+	void ResourceManager::Init(RendererRef renderer)
 	{
-		m_renderer = renderer.get();
+		m_renderer = renderer;
 
 		LoadInternalResources();
 	}

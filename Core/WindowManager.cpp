@@ -30,10 +30,10 @@ namespace CoreUI
 		return manager;
 	}
 
-	void WindowManager::Init(SDL_Window * window, RendererPtr & renderer)
+	void WindowManager::Init(SDL_Window * window, RendererRef renderer)
 	{
 		m_window = window;
-		m_renderer = renderer.get();
+		m_renderer = renderer;
 		GetEventType("timer");
 
 		LoadScreenResolutions();

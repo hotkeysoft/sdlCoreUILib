@@ -26,7 +26,7 @@ namespace CoreUI
 
 		static ResourceManager & Get();
 
-		void Init(RendererPtr & renderer);
+		void Init(RendererRef renderer);
 		void Dispose();
 
 		// Fonts
