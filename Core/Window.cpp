@@ -129,11 +129,11 @@ namespace CoreUI
 	{
 		Rect rect = m_rect;
 
-		if (m_parent == nullptr)
+		if ((m_parent == nullptr) && (m_flags & WIN_FILL))
 		{
 			rect = WINMGR().GetWindowSize();
 		}
-		
+
 		if (m_showState & WST_MAXIMIZED)
 		{
 			rect = GetParent()->GetClientRect(true, false);
@@ -513,9 +513,8 @@ namespace CoreUI
 				{
 					DrawFilledRect(&clientRect, m_backgroundColor);
 				}
-
 				m_scrollBars->Draw(&clientRect);
-				
+
 				DrawGrid();
 
 				DrawControls();
