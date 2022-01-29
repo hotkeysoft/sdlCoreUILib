@@ -71,6 +71,7 @@ namespace CoreUI
 		WindowPtr AddWindowFill(const char* id, CreationFlags flags = WindowFlags::WIN_DEFAULT);
 		WindowPtr FindWindow(const char* id);
 		WindowList GetWindowList(WindowRef parent);
+		bool RemoveWindow(const char* id);
 
 		Uint32 GetEventType(const char * type = "winmgr");
 		std::string GetEventName(Uint32 eventType) const;

@@ -109,6 +109,17 @@ namespace CoreUI
 		return nullptr;
 	}
 
+	bool WindowManager::RemoveWindow(const char* id)
+	{
+		WindowPtr wnd = FindWindow(id);
+		if (wnd == nullptr)
+		{
+			return false;
+		}
+		m_windows.remove(wnd);
+		return true;
+	}
+
 	WindowManager::WindowList WindowManager::GetWindowList(WindowRef parent)
 	{
 		WindowList childWindows;
