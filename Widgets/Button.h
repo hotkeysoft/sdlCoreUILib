@@ -42,6 +42,8 @@ namespace CoreUI
 
 		void SetText(const char *) override;
 
+		void SetPushed(bool pushed) { m_pushed = pushed; }
+
 	protected:
 		Button(const char* id, RendererRef renderer, Rect rect, const char* label, ImageRef image, FontRef font, CreationFlags flags);
 
