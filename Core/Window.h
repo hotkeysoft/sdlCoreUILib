@@ -55,6 +55,7 @@ namespace CoreUI
 		void Draw() override;
 		
 		WindowState GetShowState() const { return m_showState; }
+		void Show(bool show);
 
 		void ToggleButtonState(HitZone button, bool pushed);
 		void ButtonPushed(HitZone button);

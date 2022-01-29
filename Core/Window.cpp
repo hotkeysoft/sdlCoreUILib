@@ -74,6 +74,11 @@ namespace CoreUI
 		RenderTitle();
 	}
 
+	void Window::Show(bool show)
+	{
+		m_showState = show ? WindowState(m_showState | WST_VISIBLE) : WindowState(m_showState & ~WST_VISIBLE);
+	}
+
 	void Window::DrawSystemMenuButton(Rect pos, const CoreUI::Color & col)
 	{
 		DrawButton(&GetSystemMenuButtonRect(pos), col, m_image, !(m_pushedState & HIT_SYSMENU));
