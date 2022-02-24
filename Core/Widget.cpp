@@ -332,13 +332,13 @@ namespace CoreUI
 				m_rect.h = rect->h;
 			}
 
-			if (m_rect.w <= m_minSize.w)
+			if (m_rect.w < m_minSize.w)
 			{
 				m_rect.w = m_minSize.w;
 				m_rect.x = origin.x;
 			}
 
-			if (m_rect.h <= m_minSize.h)
+			if (m_rect.h < m_minSize.h)
 			{
 				m_rect.h = m_minSize.h;
 				m_rect.y = origin.y;
