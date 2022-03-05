@@ -101,9 +101,9 @@
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /Y "$(SDLLib64)\*.dll" "$(OutDir)"
-xcopy /d /Y "$(SDLImageLib64)\*.dll" "$(OutDir)"
-xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(SDLLib64)\*.dll" "$(OutDir)"
+xcopy /Y "$(SDLImageLib64)\*.dll" "$(OutDir)"
+xcopy /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
       <Message>Copying SDL dlls to output dir</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -118,9 +118,9 @@ xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     </ClCompile>
     <PostBuildEvent>
       <Message>Copying SDL dlls to output dir</Message>
-      <Command>xcopy /d /Y "$(SDLLib32)\*.dll" "$(OutDir)"
-xcopy /d /Y "$(SDLImageLib32)\*.dll" "$(OutDir)"
-xcopy /d /Y "$(SDLTTFLib32)\*.dll" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(SDLLib32)\*.dll" "$(OutDir)"
+xcopy /Y "$(SDLImageLib32)\*.dll" "$(OutDir)"
+xcopy /Y "$(SDLTTFLib32)\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,9 +141,9 @@ xcopy /d /Y "$(SDLTTFLib32)\*.dll" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Message>Copying SDL dlls to output dir</Message>
-      <Command>xcopy /d /Y "$(SDLLib32)\*.dll" "$(OutDir)"
-xcopy /d /Y "$(SDLImageLib32)\*.dll" "$(OutDir)"
-xcopy /d /Y "$(SDLTTFLib32)\*.dll" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(SDLLib32)\*.dll" "$(OutDir)"
+xcopy /Y "$(SDLImageLib32)\*.dll" "$(OutDir)"
+xcopy /Y "$(SDLTTFLib32)\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -165,9 +165,9 @@ xcopy /d /Y "$(SDLTTFLib32)\*.dll" "$(OutDir)"</Command>
       <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /Y "$(SDLLib64)\*.dll" "$(OutDir)"
-xcopy /d /Y "$(SDLImageLib64)\*.dll" "$(OutDir)"
-xcopy /d /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(SDLLib64)\*.dll" "$(OutDir)"
+xcopy /Y "$(SDLImageLib64)\*.dll" "$(OutDir)"
+xcopy /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
       <Message>Copying SDL dlls to output dir</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
