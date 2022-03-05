@@ -608,7 +608,7 @@ namespace CoreUI
 
 	bool TextBox::HandleEvent(SDL_Event *e)
 	{
-		const static Uint32 timerEventID = WINMGR().GetEventType("timer");
+		static Uint32 timerEventID = WINMGR().GetEventType(Timer::EventClassName());
 
 		Point pt(e->button.x, e->button.y);
 		HitResult hit = HitTest(&pt);

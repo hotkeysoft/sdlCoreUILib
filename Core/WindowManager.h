@@ -4,9 +4,10 @@
 #include "Rect.h"
 #include "Point.h"
 #include "Widget.h"
+#include "Timer.h"
 #include <string>
+#include <map>
 #include <list>
-#include <vector>
 #include <functional>
 #include <set>
 #include <sstream>
@@ -50,7 +51,7 @@ namespace CoreUI
 		using ResolutionList = std::set<ScreenResolution>;
 		using EventMap = std::map<std::string, Uint32>;
 		using ReverseEventMap = std::map<Uint32, std::string>;
-		using TimerList = std::vector<Uint32>;
+		using TimerList = std::map<Uint32, std::unique_ptr<Timer>>;
 		using WindowList = std::list<WindowPtr>;
 
 		virtual ~WindowManager() = default;
@@ -86,7 +87,7 @@ namespace CoreUI
 		const CaptureInfo & GetCapture() const { return m_capture; }
 		void ReleaseCapture() { m_capture.Reset(); }
 
-		Uint32 AddTimer(Uint32 interval);
+		Uint32 AddTimer(Uint32 interval, bool oneShot = false, Widget* owner = nullptr);
 		void DeleteTimer(Uint32 timerID);
 
 		TexturePtr SurfaceToTexture(SDL_Surface * surf);
@@ -97,6 +98,8 @@ namespace CoreUI
 		void SetScreenResolution(int modeId);
 		ResolutionList GetScreenResolutions() const { return m_screenResolutions; }
 		Rect GetWindowSize() const;
+
+		RendererRef GetRenderer() const { return m_renderer; }
 
 	protected:
 		void PostEvent(EventCode eventCode, void * data1 = nullptr, void * data2 = nullptr);

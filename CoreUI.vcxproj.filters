@@ -96,6 +96,9 @@
     <ClCompile Include="Core\Grid.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Tooltip.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -174,6 +177,12 @@
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="Core\Grid.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Timer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Tooltip.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

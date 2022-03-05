@@ -121,8 +121,6 @@ namespace CoreUI
 			frameRect = DrawFrame(&drawRect);
 		}
 
-		drawRect = drawRect.Deflate(GetShrinkFactor());
-
 		ClipRect clip(m_renderer, &frameRect);
 		if (clip)	
 		{
@@ -191,7 +189,7 @@ namespace CoreUI
 
 			if ((m_labelAlign & TEXT_V_CENTER) == TEXT_V_BOTTOM)
 			{
-				target.y += rect->h - (source.h + GetShrinkFactor().h);
+				target.y += rect->h - (source.h);
 			}
 			else if ((m_labelAlign & TEXT_V_CENTER) == TEXT_V_TOP)
 			{
@@ -217,7 +215,16 @@ namespace CoreUI
 			toRender = RemoveAmpersands(underlinePos);
 		}
 
-		SDL_Surface* label = TTF_RenderText_Blended(m_font, toRender.c_str(), m_foregroundColor);
+		SDL_Surface* label;
+		if (toRender.find('\n') == std::string::npos)
+		{
+			 label = TTF_RenderText_Blended(m_font, toRender.c_str(), m_foregroundColor);
+		}
+		else
+		{
+			label = TTF_RenderText_Blended_Wrapped(m_font, toRender.c_str(), m_foregroundColor, 0);
+		}
+
 		m_labelText = SurfaceToTexture(label);
 
 		SDL_QueryTexture(m_labelText.get(), NULL, NULL, &m_labelRect.w, &m_labelRect.h);

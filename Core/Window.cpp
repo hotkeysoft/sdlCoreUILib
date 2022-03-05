@@ -176,6 +176,9 @@ namespace CoreUI
 	Rect Window::GetRawClientRect(bool relative, bool scrolled) const // Excludes scroll bars and menu
 	{
 		Rect rect = GetRect(relative, true);
+
+		uint8_t titleBarHeight = (m_flags & WIN_BORDERLESS) ? 0 : (m_buttonSize + 2);
+
 		if (relative)
 		{
 			rect.x = 0;
@@ -184,11 +187,11 @@ namespace CoreUI
 		else
 		{
 			rect.x += m_borderWidth;
-			rect.y += m_borderWidth + (m_buttonSize + 2);
+			rect.y += m_borderWidth + titleBarHeight;
 		}
 
 		rect.w -= (2 * m_borderWidth);
-		rect.h -= (2 * m_borderWidth) + (m_buttonSize + 2);
+		rect.h -= (2 * m_borderWidth) + titleBarHeight;
 
 		if (scrolled)
 		{
@@ -201,6 +204,8 @@ namespace CoreUI
 
 	Rect Window::GetClientRect(bool relative, bool scrolled) const
 	{
+		uint8_t titleBarHeight = (m_flags & WIN_BORDERLESS) ? 0 : (m_buttonSize + 2);
+
 		Rect rect = GetRect(relative, true);
 		if (relative)
 		{
@@ -210,11 +215,11 @@ namespace CoreUI
 		else
 		{
 			rect.x += m_borderWidth;
-			rect.y += m_borderWidth + (m_buttonSize + 2);
+			rect.y += m_borderWidth + titleBarHeight;
 		}
 
 		rect.w -= (2 * m_borderWidth);
-		rect.h -= (2 * m_borderWidth) + (m_buttonSize + 2);
+		rect.h -= (2 * m_borderWidth) + titleBarHeight;
 
 		if (m_menu)
 		{
@@ -467,28 +472,35 @@ namespace CoreUI
 
 			bool active = (WINMGR().GetActive() == this || (m_flags & WIN_ACTIVE));
 
-			if (m_flags & WIN_DIALOG)
+			if (m_flags & WIN_BORDERLESS)
 			{
-				DrawFilledRect(&rect, Color::C_LIGHT_GREY);
-
-				Draw3dFrame(&rect, true, Color::C_DARK_GREY);			
-				Draw3dFrame(&rect.Deflate(1), true, Color::C_MED_GREY);			
+				SetBorderWidth(0);
 			}
 			else
 			{
-				DrawReliefBox(&rect, Color::C_LIGHT_GREY, false);
-			}
+				if (m_flags & WIN_DIALOG)
+				{
+					DrawFilledRect(&rect, Color::C_LIGHT_GREY);
 
-			DrawTitleBar(rect, active);
-			DrawTitle(rect, active);
+					Draw3dFrame(&rect, true, Color::C_DARK_GREY);
+					Draw3dFrame(&rect.Deflate(1), true, Color::C_MED_GREY);
+				}
+				else
+				{
+					DrawReliefBox(&rect, Color::C_LIGHT_GREY, false);
+				}
 
-			if (m_flags & WindowFlags::WIN_SYSMENU)
-			{
-				DrawSystemMenuButton(rect, Color::C_LIGHT_GREY);
-			}
-			if (m_flags & WindowFlags::WIN_MINMAX)
-			{
-				DrawMinMaxButtons(rect, Color::C_LIGHT_GREY);
+				DrawTitleBar(rect, active);
+				DrawTitle(rect, active);
+
+				if (m_flags & WindowFlags::WIN_SYSMENU)
+				{
+					DrawSystemMenuButton(rect, Color::C_LIGHT_GREY);
+				}
+				if (m_flags & WindowFlags::WIN_MINMAX)
+				{
+					DrawMinMaxButtons(rect, Color::C_LIGHT_GREY);
+				}
 			}
 
 			if (!(m_showState & WST_MINIMIZED))

@@ -81,7 +81,9 @@ namespace CoreUI
 
 		WIN_NOFOCUS = 512, // Control doesn't get focus
 
-		WIN_DIALOG = 1024, // Dialog look (flat)
+		WIN_DIALOG = 1024, // Dialog look
+
+		WIN_BORDERLESS = 2048, // No border or title bar
 
 		WIN_DEFAULT = WIN_SYSMENU | WIN_MINMAX | WIN_CANMOVE | WIN_CANRESIZE,
 		WIN_DEFAULTDLG = WIN_SYSMENU | WIN_MINMAX | WIN_CANMOVE | WIN_NOSCROLL | WIN_DIALOG,

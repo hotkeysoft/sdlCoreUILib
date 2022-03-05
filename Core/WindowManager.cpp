@@ -186,37 +186,41 @@ namespace CoreUI
 
 	Uint32 timerCallbackFunc(Uint32 interval, void *param)
 	{
-		const static Uint32 timerEventID = WINMGR().GetEventType("timer");
+		static Uint32 timerEventID = WINMGR().GetEventType(Timer::EventClassName());
 		if (timerEventID == (Uint32)-1)
 			return -1;
 
 		SDL_Event timerEvent;
 		SDL_zero(timerEvent);
 
+		Timer* timer = (Timer*)param;
+
 		timerEvent.type = timerEventID;
-		timerEvent.user.code = PtrToUlong(param);
+		timerEvent.user.code = timer->GetID();
+		timerEvent.user.data1 = timer;
 
 		SDL_PushEvent(&timerEvent);
-		return(interval);
+		return(timer->IsOneShot() ? 0 : interval);
 	}
 
-	Uint32 WindowManager::AddTimer(Uint32 interval)
+	Uint32 WindowManager::AddTimer(Uint32 interval, bool oneShot, Widget* owner)
 	{
-		Uint32 extTimerID = (Uint32)m_timers.size();
+		std::unique_ptr<Timer> timer = std::make_unique<Timer>(oneShot, owner);
 
-		m_timers.push_back(SDL_AddTimer(interval, timerCallbackFunc, LongToPtr(extTimerID)));
-		return extTimerID;
+		Uint32 timerID = SDL_AddTimer(interval, timerCallbackFunc, timer.get());
+		timer->SetID(timerID);
+
+		m_timers.emplace(timerID, std::move(timer));
+		return timerID;
 	}
 
 	void WindowManager::DeleteTimer(Uint32 timerID)
 	{
-		if (timerID > m_timers.size() - 1)
+		if (!SDL_RemoveTimer(timerID))
 		{
 			throw std::invalid_argument("invalid timer id");
 		}
-
-		SDL_RemoveTimer(m_timers[timerID]);
-		m_timers[timerID] = 0;
+		m_timers.erase(timerID);
 	}
 
 	void WindowManager::RaiseSingleWindow(WindowRef win)

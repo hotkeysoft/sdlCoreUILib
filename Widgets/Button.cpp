@@ -44,6 +44,9 @@ namespace CoreUI
 
 	bool Button::HandleEvent(SDL_Event *e)
 	{
+		if (Widget::HandleEvent(e))
+			return true;
+
 		Point pt(e->button.x, e->button.y);
 		HitResult hit = HitTest(&pt);
 		const CaptureInfo & capture = WINMGR().GetCapture();

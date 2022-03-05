@@ -4,6 +4,7 @@
 #include "Rect.h"
 #include "Widget.h"
 #include "WindowManager.h"
+#include "Tooltip.h"
 #include "Widgets/Image.h"
 
 namespace CoreUI
@@ -372,5 +373,41 @@ namespace CoreUI
 		toPost.user.data2 = data2;
 		
 		SDL_PushEvent(&toPost);
+	}
+
+	bool Widget::HandleEvent(SDL_Event* e)
+	{
+		static Uint32 timerEventID = WINMGR().GetEventType(Timer::EventClassName());
+
+		// Tooltip processing
+		if ((e->type == SDL_MOUSEMOTION) && m_tooltip.size() && (m_tooltipTimer == (Uint32)-1))
+		{
+			Point pt(e->button.x, e->button.y);
+			HitResult hit = HitTest(&pt);
+			if (hit)
+			{
+				// TODO: dynamic delay
+				m_tooltipTimer = WINMGR().AddTimer(300, false, this);
+			}
+		}
+		else if (e->type == timerEventID && e->user.code == m_tooltipTimer)
+		{
+			Point pt;
+			SDL_GetMouseState(&pt.x, &pt.y);
+
+			HitResult hit = HitTest(&pt);
+			if (hit)
+			{
+				TOOLTIP().Show(this, pt, m_tooltip.c_str());
+			}
+			else
+			{
+				WINMGR().DeleteTimer(m_tooltipTimer);
+				m_tooltipTimer = (Uint32)-1;
+				TOOLTIP().Hide(this);
+			}
+		}
+
+		return false;
 	}
 }

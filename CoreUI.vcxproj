@@ -177,6 +177,7 @@ xcopy /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Core\Point.cpp" />
     <ClCompile Include="Core\Rect.cpp" />
     <ClCompile Include="Core\ResourceManager.cpp" />
+    <ClCompile Include="Core\Tooltip.cpp" />
     <ClCompile Include="Core\Widget.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\WindowManager.cpp" />
@@ -205,6 +206,8 @@ xcopy /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Core\Point.h" />
     <ClInclude Include="Core\Rect.h" />
     <ClInclude Include="Core\ResourceManager.h" />
+    <ClInclude Include="Core\Timer.h" />
+    <ClInclude Include="Core\Tooltip.h" />
     <ClInclude Include="Core\Widget.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\WindowManager.h" />

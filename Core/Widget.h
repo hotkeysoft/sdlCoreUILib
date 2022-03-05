@@ -103,6 +103,10 @@ namespace CoreUI
 		virtual Color GetSelectedBgColor() { return m_selectedBgColor; }
 		virtual void SetSelectedBgColor(Color color) { m_selectedBgColor = std::move(color); }
 
+		// Tooltip
+		virtual std::string GetTooltip() const { return m_tooltip; }
+		virtual void SetTooltip(const char* str = nullptr) { m_tooltip = str ? str : ""; }
+
 		// Size & Position
 		virtual Dimension GetMinSize() { return m_minSize; }
 		virtual void SetMinSize(Dimension minSize) { m_minSize = minSize; }
@@ -119,7 +123,7 @@ namespace CoreUI
 		virtual void SetParent(WidgetRef parent);
 
 		// Events
-		virtual bool HandleEvent(SDL_Event *) { return false; }
+		virtual bool HandleEvent(SDL_Event*);
 		virtual HitResult HitTest(const PointRef) { return HitZone::HIT_NOTHING; }
 
 		virtual PointRef GetScrollPos() { return &m_scrollPos; }
@@ -163,6 +167,10 @@ namespace CoreUI
 		Point m_scrollPos;
 		bool m_focused;
 		WidgetTag m_tag;
+
+		// Tooltips
+		std::string m_tooltip;
+		Uint32 m_tooltipTimer = (Uint32)-1;
 
 		// Borders
 		bool m_showBorder;
