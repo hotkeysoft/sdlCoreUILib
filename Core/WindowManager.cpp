@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "WindowManager.h"
 #include "Window.h"
+#include "Tooltip.h"
 #include <algorithm>
 #include <iostream>
 
@@ -65,6 +66,11 @@ namespace CoreUI
 		{
 			m_activeWindow->DrawMenu();
 		}
+
+		if (m_tooltipWindow)
+		{
+			m_tooltipWindow->Draw();
+		}
 	}
 
 	WindowPtr WindowManager::AddWindowFill(const char * id, CreationFlags flags)
@@ -86,7 +92,15 @@ namespace CoreUI
 		}
 
 		WindowPtr newWindow = Window::Create(id, m_renderer, parent.get(), RES().FindFont("default"), pos, flags);
-		m_windows.push_back(newWindow);
+
+		if (id == Tooltip::GetId())
+		{
+			m_tooltipWindow = newWindow;
+		}
+		else
+		{
+			m_windows.push_back(newWindow);
+		}
 
 		return newWindow;
 	}
@@ -96,6 +110,10 @@ namespace CoreUI
 		if (id == nullptr)
 		{
 			throw std::invalid_argument("id can't be null");
+		}
+		else if (id == Tooltip::GetId())
+		{
+			return m_tooltipWindow;
 		}
 
 		for (auto & it : m_windows)
@@ -111,12 +129,22 @@ namespace CoreUI
 
 	bool WindowManager::RemoveWindow(const char* id)
 	{
+		if (id == Tooltip::GetId())
+		{
+			m_tooltipWindow = nullptr;
+			return true;
+		}
+
 		WindowPtr wnd = FindWindow(id);
 		if (wnd == nullptr)
 		{
 			return false;
 		}
 		m_windows.remove(wnd);
+		if (m_activeWindow == wnd.get())
+		{
+			m_activeWindow = nullptr;
+		}
 		return true;
 	}
 
@@ -151,7 +179,7 @@ namespace CoreUI
 
 	void WindowManager::SetActive(WindowRef win)
 	{
-		if (win == m_activeWindow)
+		if ((win == m_activeWindow) || (win->GetFlags() & WIN_NOACTIVE))
 		{
 			return;
 		}

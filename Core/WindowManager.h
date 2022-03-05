@@ -117,6 +117,7 @@ namespace CoreUI
 
 		WindowList m_windows;
 		WindowRef m_activeWindow;
+		WindowPtr m_tooltipWindow;
 
 		EventMap m_registeredEvents;
 		ReverseEventMap m_registeredEventsReverse;

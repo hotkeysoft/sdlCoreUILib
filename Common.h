@@ -85,6 +85,8 @@ namespace CoreUI
 
 		WIN_BORDERLESS = 2048, // No border or title bar
 
+		WIN_NOACTIVE = 4096, // Window is not activated on click
+
 		WIN_DEFAULT = WIN_SYSMENU | WIN_MINMAX | WIN_CANMOVE | WIN_CANRESIZE,
 		WIN_DEFAULTDLG = WIN_SYSMENU | WIN_MINMAX | WIN_CANMOVE | WIN_NOSCROLL | WIN_DIALOG,
 

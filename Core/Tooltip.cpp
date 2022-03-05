@@ -4,8 +4,6 @@
 
 namespace CoreUI
 {
-	static const char* id = "_tooltip";
-
 	Tooltip& Tooltip::Get()
 	{
 		static Tooltip tooltip;
@@ -34,8 +32,11 @@ namespace CoreUI
 		}
 
 		pos.y -= (rect.h + 4);
+		pos.y = std::max(pos.y, 0);
 
-		m_wnd = WINMGR().AddWindow(id, Rect(pos.x, pos.y, rect.w, rect.h), WIN_NOSCROLL | WIN_NOFOCUS | WIN_BORDERLESS);
+		m_wnd = WINMGR().AddWindow(GetId().c_str(), Rect(pos.x, pos.y, rect.w, rect.h),
+			WIN_NOSCROLL | WIN_NOFOCUS | WIN_NOACTIVE | WIN_BORDERLESS);
+		m_wnd->SetText(text);
 		m_wnd->SetBackgroundColor(Color(255, 255, 128, 64));
 		m_wnd->AddControl(label);
 	}
@@ -44,7 +45,7 @@ namespace CoreUI
 	{
 		if (m_wnd && (owner == m_owner))
 		{
-			WINMGR().RemoveWindow(id);
+			WINMGR().RemoveWindow(GetId().c_str());
 			m_wnd.reset();
 		}
 	}
