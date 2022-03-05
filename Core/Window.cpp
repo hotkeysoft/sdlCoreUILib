@@ -321,9 +321,10 @@ namespace CoreUI
 		{
 			Rect target = GetTitleBarRect(rect);
 
-			target.x += m_buttonSize/4;
-			target.y += (target.h - m_titleStrRect.h)/2;
-			target.w = std::min(m_titleStrRect.w, target.w - (m_buttonSize/2));
+			target.x += m_buttonSize / 4;
+			target.y += (target.h - m_titleStrRect.h) / 2;
+			target.y -= 2; // Fudge factor, fonts seem rendered lower in SDL2_ttf-2.0.18
+			target.w = std::min(m_titleStrRect.w, target.w - (m_buttonSize / 2));
 			target.h = std::min(m_titleStrRect.h, target.h);
 
 			Rect source = { 0, 0, target.w, target.h };

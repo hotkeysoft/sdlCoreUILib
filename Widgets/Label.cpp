@@ -254,7 +254,7 @@ namespace CoreUI
 			if (target)
 			{
 				SetDrawColor(m_foregroundColor);
-				SDL_RenderDrawLine(m_renderer, xPos, m_labelRect.h - 3, xPos + width, m_labelRect.h - 3);
+				SDL_RenderDrawLine(m_renderer, xPos, m_labelRect.h - 2, xPos + width, m_labelRect.h - 2);
 				m_labelText = std::move(clone);
 			}
 			else
