@@ -79,9 +79,11 @@ namespace CoreUI
 		m_showState = show ? WindowState(m_showState | WST_VISIBLE) : WindowState(m_showState & ~WST_VISIBLE);
 	}
 
-	void Window::DrawSystemMenuButton(Rect pos, const CoreUI::Color & col)
+	void Window::DrawCloseButton(Rect pos, const CoreUI::Color & col)
 	{
-		DrawButton(&GetSystemMenuButtonRect(pos), col, m_image, !(m_pushedState & HIT_SYSMENU));
+		static ImageRef restoreButton = RES().FindImage("coreUI.widget24x24", 3);
+
+		DrawButton(&GetCloseButtonRect(pos), col, restoreButton, !(m_pushedState & HIT_CLOSEBUTTON));
 	}
 
 	void Window::DrawMinMaxButtons(Rect pos, const CoreUI::Color & col)
@@ -252,19 +254,19 @@ namespace CoreUI
 
 	Rect Window::GetTitleBarRect(Rect rect) const
 	{
-		int sysButtonW = (m_flags & WindowFlags::WIN_SYSMENU) ? m_buttonSize + 2 : 0;
+		int closeButtonW = (m_flags & WindowFlags::WIN_CLOSE) ? m_buttonSize + 2 : 0;
 		int minMaxButtonW = (m_flags & WindowFlags::WIN_MINMAX) ? (m_buttonSize + 2) * 2 : 0;		
 
-		rect.x += sysButtonW + m_borderWidth;
+		rect.x += m_borderWidth;
 		rect.y += m_borderWidth;
-		rect.w -= (2 * m_borderWidth) + sysButtonW + minMaxButtonW;
+		rect.w -= (2 * m_borderWidth) + minMaxButtonW + closeButtonW;
 		rect.h = m_buttonSize + 2;
 		return rect;
 	}
 
-	Rect Window::GetSystemMenuButtonRect(Rect rect) const
+	Rect Window::GetCloseButtonRect(Rect rect) const
 	{
-		rect.x += m_borderWidth;
+		rect.x += rect.w - (m_borderWidth + (m_buttonSize + 2));
 		rect.y += m_borderWidth;
 		rect.w = m_buttonSize + 2;
 		rect.h = m_buttonSize + 2;
@@ -274,7 +276,8 @@ namespace CoreUI
 
 	Rect Window::GetMinimizeButtonRect(Rect rect) const
 	{
-		rect.x += rect.w - (m_borderWidth + (m_buttonSize + 2) * 2);
+		bool closeOffset = (m_flags & WIN_CLOSE) ? (m_buttonSize + 4): 0;
+		rect.x += rect.w - (m_borderWidth + closeOffset + (m_buttonSize + 2) * 2);
 		rect.y += m_borderWidth;
 
 		rect.w = m_buttonSize + 2;
@@ -285,7 +288,8 @@ namespace CoreUI
 
 	Rect Window::GetMaximizeButtonRect(Rect rect) const
 	{
-		rect.x += rect.w - (m_borderWidth + (m_buttonSize + 2));
+		bool closeOffset = (m_flags & WIN_CLOSE) ? (m_buttonSize + 4) : 0;
+		rect.x += rect.w - (m_borderWidth + closeOffset + (m_buttonSize + 2));
 		rect.y += m_borderWidth;
 
 		rect.w = m_buttonSize + 2;
@@ -374,9 +378,9 @@ namespace CoreUI
 		}
 
 		// Title bar buttons
-		if (GetSystemMenuButtonRect(wndRect).PointInRect(pt))
+		if (GetCloseButtonRect(wndRect).PointInRect(pt))
 		{
-			return HitResult(HitZone::HIT_SYSMENU, this);
+			return HitResult(HitZone::HIT_CLOSEBUTTON, this);
 		}
 		if (GetMinimizeButtonRect(wndRect).PointInRect(pt))
 		{
@@ -493,9 +497,9 @@ namespace CoreUI
 				DrawTitleBar(rect, active);
 				DrawTitle(rect, active);
 
-				if (m_flags & WindowFlags::WIN_SYSMENU)
+				if (m_flags & WindowFlags::WIN_CLOSE)
 				{
-					DrawSystemMenuButton(rect, Color::C_LIGHT_GREY);
+					DrawCloseButton(rect, Color::C_LIGHT_GREY);
 				}
 				if (m_flags & WindowFlags::WIN_MINMAX)
 				{
@@ -640,7 +644,7 @@ namespace CoreUI
 		{
 		case HIT_MAXBUTTON: Maximize(); break;
 		case HIT_MINBUTTON: Minimize(); break;
-		case HIT_SYSMENU: break;
+		case HIT_CLOSEBUTTON: Close();
 		case HIT_HSCROLL_LEFT: m_scrollBars->ScrollRel(&Point({ -hScroll, 0 })); break;
 		case HIT_HSCROLL_RIGHT: m_scrollBars->ScrollRel(&Point({ hScroll, 0 })); break;
 		case HIT_VSCROLL_UP: m_scrollBars->ScrollRel(&Point({ 0, -vScroll })); break;
@@ -767,6 +771,16 @@ namespace CoreUI
 		return -1;
 	}
 
+	void Window::Close()
+	{
+		if (!(m_flags & WindowFlags::WIN_CLOSE))
+		{
+			return;
+		}
+
+		PostEvent(EVENT_WINDOW_CLOSE);
+	}
+
 	void Window::SetMinimizedChild(WindowRef child, bool add)
 	{
 		if (add)
@@ -807,10 +821,11 @@ namespace CoreUI
 				bool capture = false;
 				switch (HitZone(hit))
 				{
-				case HIT_SYSMENU:
+				case HIT_CLOSEBUTTON:
 				case HIT_MINBUTTON:
 				case HIT_MAXBUTTON:
 					capture = true;
+					ToggleButtonState(hit, true);
 					break;
 
 				case HIT_TITLEBAR:
@@ -846,7 +861,7 @@ namespace CoreUI
 				ToggleButtonState(capture.Target, false);
 				switch (HitZone(hit))
 				{
-				case HIT_SYSMENU:
+				case HIT_CLOSEBUTTON:
 				case HIT_MAXBUTTON:
 				case HIT_MINBUTTON:					
 					if (hit == capture.Target)
@@ -913,7 +928,7 @@ namespace CoreUI
 				case HIT_CORNER_BOTTOMRIGHT:
 					Resize(&Point(capture.Origin.w - delta.x, capture.Origin.h - delta.y));
 					break;
-				case HIT_SYSMENU:
+				case HIT_CLOSEBUTTON:
 				case HIT_MAXBUTTON:
 				case HIT_MINBUTTON:
 					ToggleButtonState(capture.Target, capture.Target.target->HitTest(&pt) == capture.Target);
@@ -946,7 +961,7 @@ namespace CoreUI
 					SDL_SetCursor(RES().FindCursor("size.NESW"));
 					break;
 				case HIT_TITLEBAR:
-				case HIT_SYSMENU:
+				case HIT_CLOSEBUTTON:
 				case HIT_MAXBUTTON:
 				case HIT_MINBUTTON:
 					SDL_SetCursor(RES().FindCursor("default"));

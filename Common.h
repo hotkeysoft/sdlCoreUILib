@@ -39,11 +39,11 @@ namespace CoreUI
 		HIT_BORDER_ANY = HIT_BORDER_LEFT | HIT_BORDER_RIGHT | HIT_BORDER_TOP | HIT_BORDER_BOTTOM,
 		HIT_CORNER_ANY = HIT_CORNER_TOPLEFT | HIT_CORNER_TOPRIGHT | HIT_CORNER_BOTTOMLEFT | HIT_CORNER_BOTTOMRIGHT,
 
-		HIT_SYSMENU				= 0x400,
+		HIT_CLOSEBUTTON			= 0x400,
 		HIT_MINBUTTON			= 0x800,
 		HIT_MAXBUTTON			= 0x1000,
 
-		HIT_BUTTON_ANY = HIT_SYSMENU | HIT_MINBUTTON | HIT_MAXBUTTON,
+		HIT_BUTTON_ANY = HIT_CLOSEBUTTON | HIT_MINBUTTON | HIT_MAXBUTTON,
 
 		HIT_HSCROLL_LEFT		= 0x2000,
 		HIT_HSCROLL_RIGHT		= 0x4000,
@@ -69,8 +69,8 @@ namespace CoreUI
 
 	// Creation flags.  These attribute don't change during the lifetime of the window
 	enum WindowFlags : CreationFlags {
-		WIN_SYSMENU = 1, // Top left button in titlebar (left side)
-		WIN_MINMAX = 2, // Minimize / Maximize buttons in titlebar (right side)
+		WIN_CLOSE = 1, // Close button (rightmost in titlebar)
+		WIN_MINMAX = 2, // Minimize / Maximize buttons in titlebar
 		WIN_CANMOVE = 4, // Window can be moved
 		WIN_CANRESIZE = 8, // Window can be resized
 		WIN_ACTIVE = 32, // Always look active, usually for main window
@@ -87,8 +87,8 @@ namespace CoreUI
 
 		WIN_NOACTIVE = 4096, // Window is not activated on click
 
-		WIN_DEFAULT = WIN_SYSMENU | WIN_MINMAX | WIN_CANMOVE | WIN_CANRESIZE,
-		WIN_DEFAULTDLG = WIN_SYSMENU | WIN_MINMAX | WIN_CANMOVE | WIN_NOSCROLL | WIN_DIALOG,
+		WIN_DEFAULT = WIN_CLOSE | WIN_MINMAX | WIN_CANMOVE | WIN_CANRESIZE,
+		WIN_DEFAULTDLG = WIN_CLOSE | WIN_MINMAX | WIN_CANMOVE | WIN_NOSCROLL | WIN_DIALOG,
 
 		WIN_CUSTOMBASE = 65536
 	};

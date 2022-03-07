@@ -18,6 +18,7 @@ namespace CoreUI
 		{
 			EVENT_WINDOW_ACTIVATED, // Window activated
 			EVENT_WINDOW_DEACTIVATED, // Window activated
+			EVENT_WINDOW_CLOSE, // Close button pushed
 		};
 
 		DECLARE_EVENT_CLASS_NAME(Window)
@@ -70,6 +71,7 @@ namespace CoreUI
 		void Maximize();
 		void Minimize();
 		void Restore();
+		void Close();
 
 		// Grid
 		Grid& GetGrid() { return m_grid; }
@@ -91,7 +93,7 @@ namespace CoreUI
 		Window();
 
 		Rect GetTitleBarRect(Rect base) const;
-		Rect GetSystemMenuButtonRect(Rect base) const;
+		Rect GetCloseButtonRect(Rect base) const;
 		Rect GetMinimizeButtonRect(Rect base) const;
 		Rect GetMaximizeButtonRect(Rect base) const;
 
@@ -99,7 +101,7 @@ namespace CoreUI
 		int GetMinimizedChildIndex(WindowRef child) const;
 
 		void DrawMinMaxButtons(Rect pos, const CoreUI::Color & col);
-		void DrawSystemMenuButton(Rect pos, const CoreUI::Color & col);
+		void DrawCloseButton(Rect pos, const CoreUI::Color & col);
 		void DrawTitleBar(Rect rect, bool active);
 		void DrawTitle(Rect rect, bool active);
 		void DrawControls();
