@@ -2,4 +2,6 @@
 *.bak
 .vs
 x64
+Debug
+Release
 /packages
