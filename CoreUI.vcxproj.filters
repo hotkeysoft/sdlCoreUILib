@@ -101,9 +101,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Util\ClipRect.h">
       <Filter>Util</Filter>
     </ClInclude>
@@ -184,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="Core\Tooltip.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreUI.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

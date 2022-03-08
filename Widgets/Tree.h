@@ -1,5 +1,5 @@
 #pragma once
-#include "Common.h"
+#include "CoreUI.h"
 #include "Core/Rect.h"
 #include "Core/Widget.h"
 #include "Core/WindowManager.h"

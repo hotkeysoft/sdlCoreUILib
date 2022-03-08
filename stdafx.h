@@ -15,5 +15,7 @@
 #include <stdexcept>
 #include <memory>
 
+#include "CoreUI.h"
+
 #pragma warning( disable:4251 )
 #pragma warning ( disable:26429 )

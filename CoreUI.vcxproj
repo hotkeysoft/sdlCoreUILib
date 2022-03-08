@@ -204,7 +204,7 @@ xcopy /Y "$(SDLTTFLib64)\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Widgets\Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common.h" />
+    <ClInclude Include="CoreUI.h" />
     <ClInclude Include="Core\Color.h" />
     <ClInclude Include="Core\Grid.h" />
     <ClInclude Include="Core\Point.h" />

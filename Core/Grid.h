@@ -1,5 +1,5 @@
 #pragma once
-#include "Common.h"
+#include "CoreUI.h"
 #include "Rect.h"
 #include <string>
 #include <ostream>

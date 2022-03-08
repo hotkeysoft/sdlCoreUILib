@@ -1,5 +1,5 @@
 #pragma once
-#include "Common.h"
+#include "CoreUI.h"
 #include "Point.h"
 #include <string>
 #include <ostream>
