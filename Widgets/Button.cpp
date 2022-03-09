@@ -132,6 +132,7 @@ namespace CoreUI
 			return;
 
 		Rect drawRect = GetRect(false, true);
+
 		Draw(&drawRect);
 	}
 
@@ -150,11 +151,11 @@ namespace CoreUI
 		}
 
 		if (m_label)
-		{	
-			Rect target = m_label->GetRect(true, false).CenterInTarget(&drawRect, false, true);
-
+		{
+			uint8_t hAlign = m_image ? Image::IMG_H_LEFT : Image::IMG_H_CENTER;
+			m_label->SetAlign(hAlign | Image::IMG_V_CENTER);
 			m_label->SetBorder(IsFocused());
-			m_label->Draw(&target);
+			m_label->Draw(&drawRect);
 		}
 	}
 
