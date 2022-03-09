@@ -127,6 +127,21 @@ namespace CoreUI
 		return nullptr;
 	}
 
+	WindowRef WindowManager::FindParentWindow(WidgetRef w)
+	{
+		WindowRef wnd = nullptr;
+		while (w)
+		{
+			wnd = dynamic_cast<WindowRef>(w);
+			if (wnd)
+			{
+				break;
+			}
+			w = w->GetParent();
+		}
+		return wnd;
+	}
+
 	bool WindowManager::RemoveWindow(const char* id)
 	{
 		if (id == Tooltip::GetId())

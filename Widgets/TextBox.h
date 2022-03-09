@@ -15,7 +15,8 @@ namespace CoreUI
 
 		enum TextBoxEvents : EventCode
 		{
-			EVENT_TEXTBOX_CHANGED // Text changed
+			EVENT_TEXTBOX_CHANGED, // Text changed
+			EVENT_TEXTBOX_END_EDIT // Enter or Escape key in single line control (data2: 1 for enter, 0 for escape)
 		};
 
 		virtual ~TextBox() = default;
@@ -68,7 +69,6 @@ namespace CoreUI
 		using TextLines = std::vector<TextLine>;
 
 		TextBox(const char* id, RendererRef renderer, Rect rect, const char* text, CreationFlags flags);
-		WindowRef GetParentWnd() { return dynamic_cast<WindowRef>(m_parent); }
 
 		void RenderText();
 		void SplitLines();

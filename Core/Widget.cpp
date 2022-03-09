@@ -19,6 +19,7 @@ namespace CoreUI
 		m_id(id ? id : ""),
 		m_renderer(renderer),
 		m_parent(parent),
+		m_parentWindow(nullptr),
 		m_rect(rect),
 		m_text(text ? text : ""),
 		m_image(image),
@@ -38,6 +39,7 @@ namespace CoreUI
 	{
 		m_tag.o = nullptr;
 		SetFont(font);
+		UpdateParentWindow();
 	}
 
 	void Widget::SetParent(WidgetRef parent)
@@ -47,6 +49,12 @@ namespace CoreUI
 			throw std::invalid_argument("widget already has parent");
 		}
 		m_parent = parent;
+		UpdateParentWindow();
+	}
+
+	void Widget::UpdateParentWindow()
+	{
+		m_parentWindow = WINMGR().FindParentWindow(m_parent);
 	}
 
 	void Widget::SetFocus(WidgetRef focus, WidgetRef parent)

@@ -55,6 +55,7 @@ namespace CoreUI
 		virtual void SetActive() { if (m_parent) m_parent->SetActive(); }
 		virtual void SetFocus(WidgetRef focus, WidgetRef parent= nullptr);
 		virtual void ClearFocus();
+		void SetFocus() { SetFocus(this); }
 		bool IsFocused() { return m_focused; }
 
 		virtual std::string GetText() const { return m_text; }
@@ -120,6 +121,7 @@ namespace CoreUI
 		// Parent
 		virtual bool HasParent() const { return m_parent != nullptr; }
 		virtual const WidgetRef GetParent() const { return m_parent; }
+		virtual const WindowRef GetParentWindow() const { return m_parentWindow; }
 		virtual void SetParent(WidgetRef parent);
 
 		// Events
@@ -158,6 +160,8 @@ namespace CoreUI
 		TexturePtr SurfaceToTexture(SDL_Surface* surf, bool writable = false);
 		TexturePtr CloneTexture(TexturePtr source, Color background = Color::C_TRANSPARENT);
 
+		void UpdateParentWindow();
+
 		const std::string m_id;
 		Uint32 m_eventClassId;
 		CreationFlags m_flags;
@@ -165,6 +169,7 @@ namespace CoreUI
 		std::string m_text;
 		ImageRef m_image;
 		WidgetRef m_parent;
+		WindowRef m_parentWindow;
 		Rect m_rect;
 		FontRef m_font;
 		Point m_scrollPos;

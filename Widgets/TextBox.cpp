@@ -137,7 +137,7 @@ namespace CoreUI
 			DrawRect(&outlineBox, Color::C_VLIGHT_GREY);
 		}
 
-		if (m_blink && (WINMGR().GetActive() == m_parent))
+		if (m_blink && (WINMGR().GetActive() == GetParentWindow()))
 		{
 			int xPos = rect->x + m_caretPos.x - m_xOffset;
 			SetDrawColor(Color::C_DARK_GREY);
@@ -187,14 +187,21 @@ namespace CoreUI
 
 	std::string TextBox::GetText() const
 	{
-		std::ostringstream os;
-		std::string delim = "";
-		for (auto & line : m_lines)
+		if (m_flags & WIN_FILL)
 		{
-			os << delim << line.text;
-			delim = "\n";
+			std::ostringstream os;
+			std::string delim = "";
+			for (auto& line : m_lines)
+			{
+				os << delim << line.text;
+				delim = "\n";
+			}
+			return os.str();
 		}
-		return os.str();
+		else
+		{
+			return m_lines[0].text;
+		}
 	}
 
 	void TextBox::RenderText()
@@ -258,7 +265,7 @@ namespace CoreUI
 			if (!newRect.IsEqual(&m_rect))
 			{
 				m_rect = newRect;
-				GetParentWnd()->GetScrollBars()->RefreshScrollBarStatus();
+				GetParentWindow()->GetScrollBars()->RefreshScrollBarStatus();
 			}
 		}
 		else // Single line mode
@@ -369,6 +376,10 @@ namespace CoreUI
 			InsertLine(endPart.c_str(), m_currentPos.y + 1); // RenderLines();
 			MoveCursorRel(INT16_MIN, 1);
 		}
+		else // Single line mode
+		{
+			PostEvent(EVENT_TEXTBOX_END_EDIT, (void*)1);
+		}
 	}
 
 	// For proportial fonts
@@ -405,8 +416,8 @@ namespace CoreUI
 	{	
 		if (m_flags & WIN_FILL)
 		{
-			WindowRef parentWnd = GetParentWnd();
-			assert(parentWnd); // TODO update for widget in widget
+			WindowRef parentWnd = GetParentWindow();
+			assert(parentWnd);
 			Rect rect = m_parent->GetClientRect(true, true).Deflate(GetShrinkFactor());
 
 			int deltaX = m_caretPos.x + rect.x;
@@ -593,7 +604,7 @@ namespace CoreUI
 
 	HitResult TextBox::HitTest(const PointRef pt)
 	{
-		Rect parent = m_parent->GetClientRect(false, false);
+		Rect parent = m_parent->GetClientRect(false, !(m_flags & WIN_FILL));
 		if ((m_flags & WIN_FILL) && parent.PointInRect(pt))
 		{
 			return HitResult(HitZone::HIT_CONTROL, this);
@@ -613,18 +624,20 @@ namespace CoreUI
 		Point pt(e->button.x, e->button.y);
 		HitResult hit = HitTest(&pt);
 
+		bool handled = false;
 		if (e->type == timerEventID)
 		{
 			if ((Uint32)e->user.code == m_blinkTimerID && IsFocused())
 			{
 				m_blink = !m_blink;
 			}
-			return false;
+			return handled;
 		}
+
 		switch (e->type)
 		{
 		case SDL_MOUSEMOTION:	
-			if (hit)
+			if (hit && IsFocused())
 			{
 				SDL_SetCursor(RES().FindCursor("edit.ibeam"));
 			}
@@ -632,17 +645,15 @@ namespace CoreUI
 		case SDL_TEXTINPUT:
 			if (IsFocused())
 			{
+				handled = true;
 				Insert(e->text.text);
-			}
-			else
-			{
-				return false;
 			}
 			break;
 		case SDL_KEYDOWN:
 		{
 			if (IsFocused())
 			{
+				handled = true;
 				bool ctrl = SDL_GetModState() & KMOD_CTRL;
 				switch (e->key.keysym.sym)
 				{
@@ -679,16 +690,18 @@ namespace CoreUI
 				case SDLK_PAGEUP:
 					MovePage(-1);
 					break;
+				case SDLK_ESCAPE:
+					PostEvent(EVENT_TEXTBOX_END_EDIT, (void*)0);
+					break;
 				default:
-					return false;
+					break;
 				}
-			}
-			else
-			{
-				return false;
 			}
 			break;
 		}
+		case SDL_KEYUP:
+			handled = IsFocused();
+			break;
 		case SDL_MOUSEBUTTONDOWN:
 		{
 			if (hit)
@@ -696,18 +709,15 @@ namespace CoreUI
 				Point cursor = CursorAt(&pt);
 				SetActive();
 				SetFocus(this);
-				return cursor.x >= 0;
+				handled = (cursor.x >= 0);
 			}
-			else
-			{
-				return false;
-			}
+			break;
 		}
 		default:
-			return false;
+			break;
 		}
 
-		return true;
+		return handled;
 	}
 
 	struct TextBox::shared_enabler : public TextBox

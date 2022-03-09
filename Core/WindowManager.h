@@ -73,6 +73,7 @@ namespace CoreUI
 		WindowPtr FindWindow(const char* id);
 		WindowList GetWindowList(WindowRef parent);
 		bool RemoveWindow(const char* id);
+		WindowRef FindParentWindow(WidgetRef w);
 
 		Uint32 GetEventType(const char * type = "winmgr");
 		std::string GetEventName(Uint32 eventType) const;
