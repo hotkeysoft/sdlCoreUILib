@@ -255,7 +255,7 @@ namespace CoreUI
 	Rect Window::GetTitleBarRect(Rect rect) const
 	{
 		int closeButtonW = (m_flags & WindowFlags::WIN_CLOSE) ? m_buttonSize + 2 : 0;
-		int minMaxButtonW = (m_flags & WindowFlags::WIN_MINMAX) ? (m_buttonSize + 2) * 2 : 0;		
+		int minMaxButtonW = (m_flags & WindowFlags::WIN_MINMAX) ? (m_buttonSize + 2) * 2 : 0;
 
 		rect.x += m_borderWidth;
 		rect.y += m_borderWidth;
@@ -276,7 +276,7 @@ namespace CoreUI
 
 	Rect Window::GetMinimizeButtonRect(Rect rect) const
 	{
-		bool closeOffset = (m_flags & WIN_CLOSE) ? (m_buttonSize + 4): 0;
+		int closeOffset = (m_flags & WIN_CLOSE) ? (m_buttonSize + 2): 0;
 		rect.x += rect.w - (m_borderWidth + closeOffset + (m_buttonSize + 2) * 2);
 		rect.y += m_borderWidth;
 
@@ -288,7 +288,7 @@ namespace CoreUI
 
 	Rect Window::GetMaximizeButtonRect(Rect rect) const
 	{
-		bool closeOffset = (m_flags & WIN_CLOSE) ? (m_buttonSize + 4) : 0;
+		int closeOffset = (m_flags & WIN_CLOSE) ? (m_buttonSize + 2) : 0;
 		rect.x += rect.w - (m_borderWidth + closeOffset + (m_buttonSize + 2));
 		rect.y += m_borderWidth;
 
