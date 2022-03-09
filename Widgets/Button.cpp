@@ -112,6 +112,7 @@ namespace CoreUI
 	HitResult Button::HitTest(const PointRef pt)
 	{
 		Rect parent = m_parent->GetClientRect(false, true);
+
 		if (m_rect.Offset(&parent.Origin()).PointInRect(pt))
 		{
 			return HitResult(HitZone::HIT_CONTROL, this);
@@ -131,14 +132,7 @@ namespace CoreUI
 			return;
 
 		Rect drawRect = GetRect(false, true);
-
-		DrawButton(&drawRect, m_backgroundColor, nullptr, !m_pushed, m_borderWidth);
-
-		if (m_label)
-		{
-			m_label->SetBorder(IsFocused());
-			m_label->Draw(&drawRect.Deflate(m_borderWidth));
-		}
+		Draw(&drawRect);
 	}
 
 	void Button::Draw(RectRef rect)
@@ -148,8 +142,9 @@ namespace CoreUI
 
 		if (m_image)
 		{
+			uint8_t hAlign = m_label ? Image::IMG_H_LEFT : Image::IMG_H_CENTER;
 			int imageWidth = m_image->GetRect(true, false).w ;
-			m_image->Draw(&drawRect, Image::IMG_H_LEFT | Image::IMG_V_CENTER);
+			m_image->Draw(&drawRect, hAlign | Image::IMG_V_CENTER);
 			drawRect.x += imageWidth;
 			drawRect.w -= imageWidth;
 		}
