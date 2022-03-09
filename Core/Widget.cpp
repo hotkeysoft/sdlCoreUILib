@@ -357,6 +357,13 @@ namespace CoreUI
 		return m_eventClassId;
 	}
 
+	std::string Widget::MakeChildWidgetId(const char* id) const
+	{
+		std::ostringstream os;
+		os << m_id << '-' << id;
+		return os.str();
+	}
+
 	void Widget::PostEvent(EventCode code, void * data2)
 	{
 		SDL_Event toPost;

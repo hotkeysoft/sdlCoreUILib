@@ -143,6 +143,9 @@ namespace CoreUI
 
 		Uint32 GetEventClassId();
 
+		// Helper to generate widget id based on parent in the form: "{parentId}-id"
+		std::string MakeChildWidgetId(const char* id) const;
+
 		void PostEvent(EventCode code, void * data2 = nullptr);
 
 		void SetDrawColor(const CoreUI::Color & col);
