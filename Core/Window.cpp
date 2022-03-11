@@ -810,6 +810,9 @@ namespace CoreUI
 
 	bool Window::HandleEvent(SDL_Event * e)
 	{
+		if (!(m_showState & WST_VISIBLE))
+			return false;
+
 		Point pt(e->button.x, e->button.y);
 		HitResult hit = HitTest(&pt);
 
@@ -997,21 +1000,6 @@ namespace CoreUI
 				{
 					return true;
 				}
-			}
-		}
-
-		if (e->type == SDL_KEYDOWN && GetScrollBars())
-		{
-			switch (e->key.keysym.sym)
-			{
-			case SDLK_LEFT:
-				GetScrollBars()->ScrollRel(&Point(-2, 0)); return true;
-			case SDLK_RIGHT:
-				GetScrollBars()->ScrollRel(&Point(2, 0)); return true;
-			case SDLK_UP:
-				GetScrollBars()->ScrollRel(&Point(0, -2)); return true;
-			case SDLK_DOWN:
-				GetScrollBars()->ScrollRel(&Point(0, 2)); return true;
 			}
 		}
 
