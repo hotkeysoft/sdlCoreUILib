@@ -91,6 +91,7 @@ namespace CoreUI
 		Uint32 AddTimer(Uint32 interval, bool oneShot = false, Widget* owner = nullptr);
 		bool IsTimerValid(Uint32 id) const { return m_timers.find(id) != m_timers.end(); }
 		void DeleteTimer(Uint32 timerID);
+		void DeleteAllTimers();
 
 		TexturePtr SurfaceToTexture(SDL_Surface * surf);
 

@@ -266,6 +266,15 @@ namespace CoreUI
 		m_timers.erase(timerID);
 	}
 
+	void WindowManager::DeleteAllTimers()
+	{
+		for (auto& timer : m_timers)
+		{
+			SDL_RemoveTimer(timer.second->GetID());
+		}
+		m_timers.clear();
+	}
+
 	void WindowManager::RaiseSingleWindow(WindowRef win)
 	{
 		const std::string & id = win->GetId();
