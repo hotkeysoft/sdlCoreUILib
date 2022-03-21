@@ -43,7 +43,7 @@ namespace CoreUI
 
 	void Tooltip::Hide(WidgetRef owner)
 	{
-		if (m_wnd && (owner == m_owner))
+		if (m_wnd && ((owner == m_owner) || !owner))
 		{
 			WINMGR().RemoveWindow(GetId().c_str());
 			m_wnd.reset();

@@ -11,7 +11,7 @@ namespace CoreUI
 		static Tooltip& Get();
 
 		void Show(WidgetRef owner, Point pos, const char* text);
-		void Hide(WidgetRef owner);
+		void Hide(WidgetRef owner = nullptr);
 
 	protected:
 		WindowPtr m_wnd;
