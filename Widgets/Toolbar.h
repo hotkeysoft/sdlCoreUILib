@@ -31,7 +31,7 @@ namespace CoreUI
 		static ToolbarPtr Create(RendererRef renderer, const char * id, int height, CreationFlags flags = 0);
 		static ToolbarPtr CreateAutoSize(RendererRef renderer, const char * id, CreationFlags flags = 0);
 
-		ToolbarItemPtr AddToolbarItem(const char * id, ImageRef image, const char * name = nullptr);
+		ToolbarItemPtr AddToolbarItem(const char * id, ImageRef image, const char * name = nullptr, const char * insertBefore = nullptr);
 		void AddSeparator();
 
 		bool HandleEvent(SDL_Event *) override;
@@ -49,7 +49,7 @@ namespace CoreUI
 		void UpdateSize(ToolbarItemPtr);
 
 		ToolbarItemPtr ItemAt(PointRef pt);
-	
+
 		ToolbarItems m_items;
 		int m_height;
 

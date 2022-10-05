@@ -19,7 +19,7 @@ namespace CoreUI
 		if (((flags & WIN_AUTOSIZE) == 0) && (height < 8 || height > 128))
 		{
 			throw std::out_of_range("toolbar height out of range [8-128]");
-		}	
+		}
 	}
 
 	ToolbarPtr Toolbar::Create(RendererRef renderer, const char * id, int height, CreationFlags flags)
@@ -39,7 +39,7 @@ namespace CoreUI
 	}
 
 	int Toolbar::GetHeight(int clientWidth) const
-	{ 
+	{
 		return m_height;
 	}
 
@@ -55,7 +55,7 @@ namespace CoreUI
 
 		ClipRect clip(m_renderer, &drawRect);
 		if (clip)
-		{			
+		{
 			for (auto & item : m_items)
 			{
 				if (item)
@@ -73,7 +73,7 @@ namespace CoreUI
 		}
 	}
 
-	ToolbarItemPtr Toolbar::AddToolbarItem(const char * id, ImageRef image, const char * name)
+	ToolbarItemPtr Toolbar::AddToolbarItem(const char * id, ImageRef image, const char * name, const char * insertBefore)
 	{
 		if (id == nullptr)
 		{
@@ -97,8 +97,23 @@ namespace CoreUI
 		ToolbarItemPtr item = ToolbarItem::Create(id, m_renderer, name, image);
 		item->SetParent(this);
 		item->Init();
-		
-		m_items.push_back(item);
+
+		if (insertBefore)
+		{
+			auto before = FindByID(insertBefore);
+			if (before != m_items.end())
+			{
+				m_items.insert(before, item);
+			}
+			else
+			{
+				throw std::invalid_argument("insertBefore unknown id");
+			}
+		}
+		else
+		{
+			m_items.push_back(item);
+		}
 
 		UpdateSize(item);
 
@@ -129,7 +144,7 @@ namespace CoreUI
 	}
 
 	HitResult Toolbar::HitTest(const PointRef pt)
-	{		
+	{
 		if (m_rect.PointInRect(pt))
 		{
 			return HitResult(HitZone::HIT_TOOLBAR, this);
