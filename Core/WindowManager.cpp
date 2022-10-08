@@ -203,7 +203,7 @@ namespace CoreUI
 		{
 			m_activeWindow->PostEvent(Window::EVENT_WINDOW_DEACTIVATED);
 		}
-		
+
 		m_activeWindow = win;
 
 		if (m_activeWindow)
@@ -335,7 +335,7 @@ namespace CoreUI
 
 		Uint32 eventId = FindEventType(type);
 		if (eventId == (Uint32)-1)
-		{			
+		{
 			eventId = SDL_RegisterEvents(1);
 			if (eventId == (Uint32)-1)
 			{
@@ -345,8 +345,8 @@ namespace CoreUI
 			m_registeredEventsReverse[eventId] = type;
 
 			std::cout << "Register: " << type << ", eventID = " << eventId << std::endl;
-		}		
-		
+		}
+
 		return eventId;
 	}
 
@@ -365,7 +365,7 @@ namespace CoreUI
 		return SDL_GetWindowFlags(m_window) & SDL_WINDOW_FULLSCREEN;
 	}
 
-	void WindowManager::ToggleFullscreen() 
+	void WindowManager::ToggleFullscreen()
 	{
 		SDL_SetWindowFullscreen(m_window, IsFullscreen() ? 0 : SDL_WINDOW_FULLSCREEN);
 		SDL_ShowCursor(1);
@@ -401,14 +401,14 @@ namespace CoreUI
 			SDL_SetWindowSize(m_window, mode.w, mode.h);
 		}
 
-		PostEvent(EVENT_WINDOWMANAGER_DISPLAYCHANGED);	
+		PostEvent(EVENT_WINDOWMANAGER_DISPLAYCHANGED);
 
 		m_windowSize.Clear();
 	}
 
-	Rect WindowManager::GetWindowSize() const
+	Rect WindowManager::GetWindowSize(bool force) const
 	{
-		if (m_windowSize.IsEmpty())
+		if (force || m_windowSize.IsEmpty())
 		{
 			SDL_GetWindowSize(m_window, &m_windowSize.w, &m_windowSize.h);
 		}

@@ -42,7 +42,7 @@ namespace CoreUI
 
 	enum WindowManagerEvents : EventCode
 	{
-		EVENT_WINDOWMANAGER_DISPLAYCHANGED, 
+		EVENT_WINDOWMANAGER_DISPLAYCHANGED,
 	};
 
 	class DllExport WindowManager
@@ -100,7 +100,8 @@ namespace CoreUI
 		ScreenResolution GetScreenResolution() const;
 		void SetScreenResolution(int modeId);
 		ResolutionList GetScreenResolutions() const { return m_screenResolutions; }
-		Rect GetWindowSize() const;
+		// force = true to discard cached size, use after resize
+		Rect GetWindowSize(bool force = false) const;
 
 		RendererRef GetRenderer() const { return m_renderer; }
 
